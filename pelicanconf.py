@@ -43,6 +43,6 @@ SOCIAL = (
     ('twitter', 'http://twitter.com/lucasmagn'),
 )
 
-THEME = '../lucasmagnum-theme'
+THEME = 'theme'
 
 DEFAULT_PAGINATION = 5
