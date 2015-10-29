@@ -30,21 +30,21 @@ Parte I
 
 Parte 2
 ---------
-    - `Brincando com formulários <http://pythonclub.com.br/selenium-parte-2.html#brincando-com-formularios>`_
-    - `Trabalhando com múltiplas janelas <http://pythonclub.com.br/selenium-parte-2.html#trabalhando-com-multiplas-janelas>`_
-    - `Trabalhando com frames <http://pythonclub.com.br/selenium-parte-2.html#trabalhando-com-frames>`_
-    - `E se eu quiser esperar?! <http://pythonclub.com.br/selenium-parte-2.html#e-se-eu-quiser-esperar>`_
+    - `Brincando com formulários </selenium-parte-2.html#brincando-com-formularios>`_
+    - `Trabalhando com múltiplas janelas </selenium-parte-2.html#trabalhando-com-multiplas-janelas>`_
+    - `Trabalhando com frames </selenium-parte-2.html#trabalhando-com-frames>`_
+    - `E se eu quiser esperar?! </selenium-parte-2.html#e-se-eu-quiser-esperar>`_
 
 Parte 3
 --------
-    - `Executando código javascript <http://pythonclub.com.br/selenium-parte-3.html#executando-codigo-javascript>`_
-    - `Como utilizar diferentes navegadores <http://pythonclub.com.br/selenium-parte-3.html#como-utilizar-diferentes-navegadores>`_
+    - `Executando código javascript </selenium-parte-3.html#executando-codigo-javascript>`_
+    - `Como utilizar diferentes navegadores </selenium-parte-3.html#como-utilizar-diferentes-navegadores>`_
 
 Parte 4
 --------
-    - `Expected conditions <http://pythonclub.com.br/selenium-parte-4.html#expected-conditions>`_
-    - `ActionsChains - Operações avançadas <http://pythonclub.com.br/selenium-parte-4.html#actionschains-operacoes-avancadas>`_
-    - `EventListener - Ouvindo seu código <http://pythonclub.com.br/selenium-parte-4.html#eventlistener-ouvindo-seu-codigo>`_
+    - `Expected conditions </selenium-parte-4.html#expected-conditions>`_
+    - `ActionsChains - Operações avançadas </selenium-parte-4.html#actionschains-operacoes-avancadas>`_
+    - `EventListener - Ouvindo seu código </selenium-parte-4.html#eventlistener-ouvindo-seu-codigo>`_
 
 
 ================
@@ -156,7 +156,7 @@ Exemplo para estudo
 
   **Premissas**
 
-  No `Python Club <http://pythonclub.com.br/>`_ os ``posts`` estão localizados dentro de uma ``div``.
+  No `Python Club </>`_ os ``posts`` estão localizados dentro de uma ``div``.
 
   .. code-block:: html
 
@@ -195,7 +195,7 @@ Execute o código abaixo e veja o resultado.
   firefox = webdriver.Firefox()
 
   # Abrir a página do Python Club
-  firefox.get('http://pythonclub.com.br/')
+  firefox.get('/')
 
   # Seleciono todos os elementos que possuem a class post
   posts = firefox.find_elements_by_class_name('post')
@@ -235,7 +235,7 @@ Desafios
   Modificar o exemplo 01 para salvar os dados(titulo, link, autor) em um arquivo ``json``.
 
 
-Gostou? Leia a `segunda parte <http://pythonclub.com.br/selenium-parte-2.html>`_.
+Gostou? Leia a `segunda parte </selenium-parte-2.html>`_.
 
 
 Qualquer dúvida pode enviar um e-mail `lucasmagnumlopes@gmail.com <lucasmagnumlopes@gmail.com>`_ ficarei feliz em ajudar =)

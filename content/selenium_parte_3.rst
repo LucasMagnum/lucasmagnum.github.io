@@ -13,8 +13,8 @@ Selenium - O que você deveria saber - Parte 3
 
 Esse é o terceiro post da série sobre Selenium, hoje vamos aprender a executar código javascript e usar diferentes navegadores.
 
-    - Veja a `primeira parte <http://pythonclub.com.br/selenium-parte-1.html>`_.
-    - Veja a `segunda parte <http://pythonclub.com.br/selenium-parte-2.html>`_.
+    - Veja a `primeira parte </selenium-parte-1.html>`_.
+    - Veja a `segunda parte </selenium-parte-2.html>`_.
 
 
 Parte 3

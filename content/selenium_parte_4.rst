@@ -13,9 +13,9 @@ Selenium - O que você deveria saber - Parte 4
 
 Esse é o quarto post da série sobre Selenium, hoje você irá aprender a fazer algumas coisas mais interessantes!
 
-    - Veja a `primeira parte <http://pythonclub.com.br/selenium-parte-1.html>`_.
-    - Veja a `segunda parte <http://pythonclub.com.br/selenium-parte-2.html>`_.
-    - Veja a `terceira parte <http://pythonclub.com.br/selenium-parte-3.html>`_.
+    - Veja a `primeira parte </selenium-parte-1.html>`_.
+    - Veja a `segunda parte </selenium-parte-2.html>`_.
+    - Veja a `terceira parte </selenium-parte-3.html>`_.
 
 
 Esse post será o mais longo, então prepare-se!
@@ -69,7 +69,7 @@ Essas condições são chamadas ``expected conditions``, abaixo a lista das prin
 
 *Todas as funções estão no arquivo: selenium/webdriver/support/expected_conditions.py*
 
-Você pode utilizar essas funções em conjunto com o que foi aprendido na `Parte 2 <http://pythonclub.com.br/selenium-parte-2.html#e-se-eu-quiser-esperar>`_
+Você pode utilizar essas funções em conjunto com o que foi aprendido na `Parte 2 </selenium-parte-2.html#e-se-eu-quiser-esperar>`_
 
 Exemplos de uso:
 
