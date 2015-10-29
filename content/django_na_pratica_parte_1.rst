@@ -208,7 +208,7 @@ Logo, nosso arquivo deve ficar assim:
 Agora, se abrirmos nosso navegador no endereço ``http://127.0.0.1:8000/`` já recebemos a página de bem vindo do Django =DDD
 
 
-.. image:: images/lucasmagnum/itworked.png
+.. image:: images/itworked.png
     :alt: itworked
 
 
@@ -266,7 +266,7 @@ Fazemos isso usando utilizado uma expressão regular associada à uma função, 
 
 Agora, se abrirmos o navegador, iremos nos deparar com o seguinte resultado:
 
-.. image:: images/lucasmagnum/helloworld.png
+.. image:: images/helloworld.png
     :alt: hello world
 
 
