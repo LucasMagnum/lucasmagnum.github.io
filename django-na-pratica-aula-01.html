@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/css/pygments.min.css">
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/css/font-awesome.min.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+<meta name="author" content="Lucas Magnum" />
+<meta name="description" content="Esse é o primeiro post do Curso django na prática onde você aprenderá tudo que precisa para criar um sistema web :D Utilizaremos a versão 1.8 do Django com Python 3! Requisitos Python 3.X Virtualenv pip Se precisar de ajuda para instalar o pip, você pode utilizar esse ..." />
+<meta name="keywords" content="python, django, django-na-pratica">
+<meta property="og:site_name" content="Lucas Magnum"/>
+<meta property="og:title" content="Django na prática - Hello World"/>
+<meta property="og:description" content="Esse é o primeiro post do Curso django na prática onde você aprenderá tudo que precisa para criar um sistema web :D Utilizaremos a versão 1.8 do Django com Python 3! Requisitos Python 3.X Virtualenv pip Se precisar de ajuda para instalar o pip, você pode utilizar esse ..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://localhost:8000/django-na-pratica-aula-01.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2015-09-09 18:55:00-03:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="http://localhost:8000/author/lucas-magnum.html">
+<meta property="article:section" content="Python"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="django"/>
+<meta property="article:tag" content="django-na-pratica"/>
+<meta property="og:image" content="http://localhost:8000/theme/img/avatar.jpg">  <title>Lucas Magnum &ndash; Django na prática - Hello World</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="http://localhost:8000">
+        <img src="http://localhost:8000/theme/img/avatar.jpg" alt="Lucas Magnum" title="Lucas Magnum">
+      </a>
+      <h1><a href="http://localhost:8000">Lucas Magnum</a></h1>
+      <p>Software Developer</p>
+      <nav>
+        <ul class="list">
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/lucasmagnum" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-linkedin" href="https://br.linkedin.com/in/lucasmagnum" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/lmloliveira" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-twitter" href="http://twitter.com/lucasmagn" target="_blank"><i class="fa fa-twitter"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+
+<article>
+  <header>
+    <h1 id="django-na-pratica-aula-01">Django na prática - Hello World</h1>
+    <p>Publicado em Qua 09 setembro 2015 in <a href="http://localhost:8000/category/python.html">Python</a></p>
+  </header>
+  <div>
+    <p>Esse é o primeiro post do Curso <strong>django na prática</strong> onde você aprenderá tudo que precisa para criar um sistema web :D</p>
+<p>Utilizaremos a versão 1.8 do Django com Python 3!</p>
+<div class="section" id="requisitos">
+<h2>Requisitos</h2>
+<ul class="simple">
+<li>Python 3.X</li>
+<li>Virtualenv</li>
+<li>pip</li>
+</ul>
+<p>Se precisar de ajuda para instalar o pip, você pode utilizar esse <a class="reference external" href="http://stackoverflow.com/questions/6587507/how-to-install-pip-with-python-3">tutorial</a>.</p>
+<div class="section" id="convencoes">
+<h3>Convenções</h3>
+<div class="highlight"><pre><span class="nv">$ </span>indica que comando deve ser executado no terminal <span class="k">do</span> Linux
+&gt;&gt;&gt; indica que comando deve ser executado pelo interpretador Python em modo interativo
+</pre></div>
+</div>
+</div>
+<div class="section" id="instalacao">
+<h2>Instalação</h2>
+<p>Ative seu virtualenv e instale o Django na versão 1.8:</p>
+<div class="highlight"><pre><span class="nv">$ </span>pip install <span class="nv">django</span><span class="o">==</span>1.8
+</pre></div>
+<p>Se tiver alguma duvida, você pode olhar na <a class="reference external" href="https://docs.djangoproject.com/en/1.8/intro/install/">documentação</a> como instalar o framework.</p>
+<p>Para verificar se está tudo certo, abra o interpretador python e verifique a versão do Django:</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">django</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">django</span><span class="o">.</span><span class="n">get_version</span><span class="p">())</span>
+<span class="mf">1.8</span>
+</pre></div>
+<p>Isso é tudo que precisamos para começar =)</p>
+</div>
+<div class="section" id="django-admin-py">
+<h2>django-admin.py</h2>
+<p>o <tt class="docutils literal"><span class="pre">django-admin.py</span></tt> é um script de linha de comando do Django que nos oferece vários comandos administrativos.</p>
+<p>Existem várias opções, para visualizar todas basta executar:</p>
+<div class="highlight"><pre><span class="nv">$ </span>django-admin.py <span class="nb">help</span>
+</pre></div>
+<p>Alguns parâmetros importantes são <tt class="docutils literal"><span class="pre">--pythonpath</span></tt> e <tt class="docutils literal"><span class="pre">--settings</span></tt>.</p>
+<blockquote>
+<ul class="simple">
+<li>Como vamos criar nosso projeto do zero, precisamos informar onde nossos módulos estarão localizados e para isso utilizaremos o parâmetro <tt class="docutils literal"><span class="pre">--pythonpath</span></tt>.</li>
+<li>Precisamos informar ao Django onde encontrar nossas configurações e para isso utilizaremos o parâmetro <tt class="docutils literal"><span class="pre">--settings</span></tt>.</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="configurando-o-ambiente">
+<h2>Configurando o ambiente</h2>
+<p>Crie um arquivo chamado <tt class="docutils literal">helloworld.py</tt>:</p>
+<div class="highlight"><pre><span class="nv">$ </span>touch helloworld.py
+</pre></div>
+<p>Criamos nosso arquivo e agora vamos rodar o <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/django-admin/#runserver-port-or-address-port">ambiente de desenvolvimento</a> do Django :D</p>
+<div class="highlight"><pre><span class="nv">$ </span>django-admin.py runserver --pythonpath<span class="o">=</span>. --settings<span class="o">=</span>helloworld
+</pre></div>
+<p>Dessa forma, estamos dizendo ao Django que nossos arquivos estão no diretório atual e que nossas configurações estão no arquivo <tt class="docutils literal">heloworld</tt> (não devemos informar a extensão do arquivo no parâmetro).</p>
+<p><strong>Puts</strong>, ocorreu um erro!</p>
+<div class="highlight"><pre>django.core.exceptions.ImproperlyConfigured: The SECRET_KEY setting must not be empty.
+</pre></div>
+<p>Atualmente o Django não inicia sem a <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key">SECRET_KEY</a> configurada. Precisamos adiciona-la ao nosso arquivo.</p>
+<p>Abra o arquivo <tt class="docutils literal">helloworld.py</tt> e insira uma SECRET_KEY qualquer:</p>
+<div class="highlight"><pre><span class="n">SECRET_KEY</span><span class="o">=</span><span class="s">&#39;helloworld&#39;</span>
+</pre></div>
+<p>Para ambiente de teste não existe nenhum problema em deixar nossa SECRET_KEY com esse valor, porém para o ambiente de produção é necessário que seja um valor randômico. A SECRET_KEY é utilizada em diversas partes da sua aplicação e você NÂO DEVE deixá-la pública para ambientes de produção.
+Mais informações <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key">aqui</a>.</p>
+<p>Executando novamente nosso ambiente, teremos o seguinte erro:</p>
+<div class="highlight"><pre><span class="nv">$ </span>django-admin.py runserver --pythonpath<span class="o">=</span>. --settings<span class="o">=</span>helloworld
+
+CommandError: You must <span class="nb">set </span>settings.ALLOWED_HOSTS <span class="k">if</span> DEBUG is False.
+</pre></div>
+<p>Como estamos em ambiente de desenvolvimento, precisamos utilizar o <tt class="docutils literal">DEBUG</tt> como <tt class="docutils literal">True</tt>, somente para produção que ele será desativado.</p>
+<p>Nosso arquivo <tt class="docutils literal">helloworld.py</tt> agora está assim:</p>
+<div class="highlight"><pre><span class="n">SECRET_KEY</span><span class="o">=</span><span class="s">&#39;helloworld&#39;</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+<p>Com isso já é possível subir o ambiente de desenvolvimento.</p>
+<div class="highlight"><pre><span class="nv">$ </span>django-admin.py runserver --pythonpath<span class="o">=</span>. --settings<span class="o">=</span>helloworld
+
+Performing system checks...
+
+System check identified some issues:
+
+WARNINGS:
+?: <span class="o">(</span>1_7.W001<span class="o">)</span> MIDDLEWARE_CLASSES is not set.
+    HINT: Django 1.7 changed the global defaults <span class="k">for</span> the MIDDLEWARE_CLASSES. django.contrib.sessions.middleware.SessionMiddleware, django.contrib.auth.middleware.AuthenticationMiddleware, and django.contrib.messages.middleware.MessageMiddleware were removed from the defaults. If your project needs these middleware <span class="k">then</span> you should configure this setting.
+
+System check identified <span class="m">1</span> issue <span class="o">(</span><span class="m">0</span> silenced<span class="o">)</span>.
+September 10, <span class="m">2015</span> - 15:50:09
+Django version 1.8.4, using settings <span class="s1">&#39;helloworld&#39;</span>
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+</pre></div>
+<p>Pronto! Nosso ambiente já está rodando na porta 8000, abra seu navegador e digite <tt class="docutils literal"><span class="pre">http://127.0.0.1:8000/</span></tt>.</p>
+</div>
+<div class="section" id="hello-world">
+<h2>Hello World</h2>
+<p>Ok, nosso ambiente está rodando, porém ainda temos erros. O que aconteceu?</p>
+<p>Se você visualizar no terminal onde o ambiente está sendo executado, verá a seguinte mensagem:</p>
+<div class="highlight"><pre>AttributeError: <span class="s1">&#39;Settings&#39;</span> object has no attribute <span class="s1">&#39;ROOT_URLCONF&#39;</span>
+</pre></div>
+<p>Para encontrar as views* que serão renderizadas no projeto, o Django procura primeiro as configurações no
+arquivo apontado pelo <tt class="docutils literal">ROOT_URLCONF</tt>.</p>
+<ul class="simple">
+<li>uma view é uma função responsável por retornar algo para ser renderizado no browser, pode ser um html, um arquivo, um json e etc. *</li>
+</ul>
+<p>Como toda nossa aplicação ficará por enquanto no arquivo <tt class="docutils literal">helloworld.py</tt>, vamos apontar nosso <tt class="docutils literal">ROOT_URLCONF</tt> para ele.</p>
+<p>Abra o arquivo <tt class="docutils literal">helloworld.py</tt> e insira o seguinte código:</p>
+<div class="highlight"><pre><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">&#39;helloworld&#39;</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+</pre></div>
+<p>Estamos dizendo ao Django que nossas <cite>urls</cite> estão nesse arquivo, para reconhecer as urls, o django procura
+pela variável <tt class="docutils literal">urlpatterns</tt>.</p>
+<p>Logo, nosso arquivo deve ficar assim:</p>
+<div class="highlight"><pre><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">&#39;helloworld&#39;</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+<p>Agora, se abrirmos nosso navegador no endereço <tt class="docutils literal"><span class="pre">http://127.0.0.1:8000/</span></tt> já recebemos a página de bem vindo do Django =DDD</p>
+<img alt="itworked" src="images/lucasmagnum/itworked.png" />
+<div class="section" id="nossa-primeira-view">
+<h3>Nossa primeira view</h3>
+<p>Agora sim, tudo está pronto para criarmos nossa primeira view!</p>
+<p>Vamos criar nossa view chamada <tt class="docutils literal">hello_world</tt>, toda view recebe como primeiro o <tt class="docutils literal">request</tt>,
+e precisa retornar alguma resposta para o navegador, vamos retornar um <tt class="docutils literal">HttpResponse</tt> com o texto
+<em>Django na prática - Hello World!</em></p>
+<p>Modifique seu <tt class="docutils literal">helloworld.py</tt> para que fique assim:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">&#39;helloworld&#39;</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&#39;Django na prática - Hello World!&#39;</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+<p>Pronto! Temos nossa view criada, porém ainda não conseguimos acessá-la.
+Precisamos dizer ao framework como essa view pode ser encontrada e para qual <tt class="docutils literal">url</tt> ela deve responder.</p>
+<p>Façamos dessa forma:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">&#39;helloworld&#39;</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&#39;Django na prática - Hello World!&#39;</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">hello_world</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+<p>Dentro do <tt class="docutils literal">urlpatterns</tt> nós informamos quais são as urls disponíveis no nosso projeto.
+Fazemos isso usando utilizado uma expressão regular associada à uma função, que no nosso caso é o <tt class="docutils literal">hello_world</tt>.</p>
+<p>Agora, se abrirmos o navegador, iremos nos deparar com o seguinte resultado:</p>
+<img alt="hello world" src="images/lucasmagnum/helloworld.png" />
+<p>Por hoje é isso!!! Guarde o arquivo criado hoje, pois ele será utilizado nas próximas aulas!</p>
+<p>Até a próxima =)</p>
+</div>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="http://localhost:8000/tag/python.html">python</a>
+      <a href="http://localhost:8000/tag/django.html">django</a>
+      <a href="http://localhost:8000/tag/django-na-pratica.html">django-na-pratica</a>
+    </p>
+  </div>
+</article>
+
+    <footer>
+<p>
+  &copy; Lucas Magnum  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Django na prática - Hello World",
+  "headline": "Django na prática - Hello World",
+  "datePublished": "2015-09-09 18:55:00-03:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "Lucas Magnum",
+    "url": "http://localhost:8000/author/lucas-magnum.html"
+  },
+  "image": "http://localhost:8000/theme/img/avatar.jpg",
+  "url": "http://localhost:8000/django-na-pratica-aula-01.html",
+  "description": "Esse é o primeiro post do Curso django na prática onde você aprenderá tudo que precisa para criar um sistema web :D Utilizaremos a versão 1.8 do Django com Python 3! Requisitos Python 3.X Virtualenv pip Se precisar de ajuda para instalar o pip, você pode utilizar esse ..."
+}
+</script></body>
+</html>
