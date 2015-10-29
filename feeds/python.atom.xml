@@ -1,0 +1,1334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Lucas Magnum</title><link href="/" rel="alternate"></link><link href="/feeds/python.atom.xml" rel="self"></link><id>/</id><updated>2015-09-09T18:55:00-03:00</updated><entry><title>Django na prática - Hello World</title><link href="/django-na-pratica-aula-01.html" rel="alternate"></link><updated>2015-09-09T18:55:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2015-09-09:django-na-pratica-aula-01.html</id><summary type="html">&lt;p&gt;Esse é o primeiro post do Curso &lt;strong&gt;django na prática&lt;/strong&gt; onde você aprenderá tudo que precisa para criar um sistema web :D&lt;/p&gt;
+&lt;p&gt;Utilizaremos a versão 1.8 do Django com Python 3!&lt;/p&gt;
+&lt;div class="section" id="requisitos"&gt;
+&lt;h2&gt;Requisitos&lt;/h2&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Python 3.X&lt;/li&gt;
+&lt;li&gt;Virtualenv&lt;/li&gt;
+&lt;li&gt;pip&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Se precisar de ajuda para instalar o pip, você pode utilizar esse &lt;a class="reference external" href="http://stackoverflow.com/questions/6587507/how-to-install-pip-with-python-3"&gt;tutorial&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="section" id="convencoes"&gt;
+&lt;h3&gt;Convenções&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;indica que comando deve ser executado no terminal &lt;span class="k"&gt;do&lt;/span&gt; Linux
+&amp;gt;&amp;gt;&amp;gt; indica que comando deve ser executado pelo interpretador Python em modo interativo
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="instalacao"&gt;
+&lt;h2&gt;Instalação&lt;/h2&gt;
+&lt;p&gt;Ative seu virtualenv e instale o Django na versão 1.8:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pip install &lt;span class="nv"&gt;django&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;1.8
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Se tiver alguma duvida, você pode olhar na &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/intro/install/"&gt;documentação&lt;/a&gt; como instalar o framework.&lt;/p&gt;
+&lt;p&gt;Para verificar se está tudo certo, abra o interpretador python e verifique a versão do Django:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;django&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;django&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_version&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;span class="mf"&gt;1.8&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Isso é tudo que precisamos para começar =)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="django-admin-py"&gt;
+&lt;h2&gt;django-admin.py&lt;/h2&gt;
+&lt;p&gt;o &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;django-admin.py&lt;/span&gt;&lt;/tt&gt; é um script de linha de comando do Django que nos oferece vários comandos administrativos.&lt;/p&gt;
+&lt;p&gt;Existem várias opções, para visualizar todas basta executar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;django-admin.py &lt;span class="nb"&gt;help&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Alguns parâmetros importantes são &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;--pythonpath&lt;/span&gt;&lt;/tt&gt; e &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;--settings&lt;/span&gt;&lt;/tt&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Como vamos criar nosso projeto do zero, precisamos informar onde nossos módulos estarão localizados e para isso utilizaremos o parâmetro &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;--pythonpath&lt;/span&gt;&lt;/tt&gt;.&lt;/li&gt;
+&lt;li&gt;Precisamos informar ao Django onde encontrar nossas configurações e para isso utilizaremos o parâmetro &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;--settings&lt;/span&gt;&lt;/tt&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="configurando-o-ambiente"&gt;
+&lt;h2&gt;Configurando o ambiente&lt;/h2&gt;
+&lt;p&gt;Crie um arquivo chamado &lt;tt class="docutils literal"&gt;helloworld.py&lt;/tt&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;touch helloworld.py
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Criamos nosso arquivo e agora vamos rodar o &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/django-admin/#runserver-port-or-address-port"&gt;ambiente de desenvolvimento&lt;/a&gt; do Django :D&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;django-admin.py runserver --pythonpath&lt;span class="o"&gt;=&lt;/span&gt;. --settings&lt;span class="o"&gt;=&lt;/span&gt;helloworld
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Dessa forma, estamos dizendo ao Django que nossos arquivos estão no diretório atual e que nossas configurações estão no arquivo &lt;tt class="docutils literal"&gt;heloworld&lt;/tt&gt; (não devemos informar a extensão do arquivo no parâmetro).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Puts&lt;/strong&gt;, ocorreu um erro!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;django.core.exceptions.ImproperlyConfigured: The SECRET_KEY setting must not be empty.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Atualmente o Django não inicia sem a &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key"&gt;SECRET_KEY&lt;/a&gt; configurada. Precisamos adiciona-la ao nosso arquivo.&lt;/p&gt;
+&lt;p&gt;Abra o arquivo &lt;tt class="docutils literal"&gt;helloworld.py&lt;/tt&gt; e insira uma SECRET_KEY qualquer:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;helloworld&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Para ambiente de teste não existe nenhum problema em deixar nossa SECRET_KEY com esse valor, porém para o ambiente de produção é necessário que seja um valor randômico. A SECRET_KEY é utilizada em diversas partes da sua aplicação e você NÂO DEVE deixá-la pública para ambientes de produção.
+Mais informações &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key"&gt;aqui&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Executando novamente nosso ambiente, teremos o seguinte erro:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;django-admin.py runserver --pythonpath&lt;span class="o"&gt;=&lt;/span&gt;. --settings&lt;span class="o"&gt;=&lt;/span&gt;helloworld
+
+CommandError: You must &lt;span class="nb"&gt;set &lt;/span&gt;settings.ALLOWED_HOSTS &lt;span class="k"&gt;if&lt;/span&gt; DEBUG is False.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Como estamos em ambiente de desenvolvimento, precisamos utilizar o &lt;tt class="docutils literal"&gt;DEBUG&lt;/tt&gt; como &lt;tt class="docutils literal"&gt;True&lt;/tt&gt;, somente para produção que ele será desativado.&lt;/p&gt;
+&lt;p&gt;Nosso arquivo &lt;tt class="docutils literal"&gt;helloworld.py&lt;/tt&gt; agora está assim:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;helloworld&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Com isso já é possível subir o ambiente de desenvolvimento.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;django-admin.py runserver --pythonpath&lt;span class="o"&gt;=&lt;/span&gt;. --settings&lt;span class="o"&gt;=&lt;/span&gt;helloworld
+
+Performing system checks...
+
+System check identified some issues:
+
+WARNINGS:
+?: &lt;span class="o"&gt;(&lt;/span&gt;1_7.W001&lt;span class="o"&gt;)&lt;/span&gt; MIDDLEWARE_CLASSES is not set.
+    HINT: Django 1.7 changed the global defaults &lt;span class="k"&gt;for&lt;/span&gt; the MIDDLEWARE_CLASSES. django.contrib.sessions.middleware.SessionMiddleware, django.contrib.auth.middleware.AuthenticationMiddleware, and django.contrib.messages.middleware.MessageMiddleware were removed from the defaults. If your project needs these middleware &lt;span class="k"&gt;then&lt;/span&gt; you should configure this setting.
+
+System check identified &lt;span class="m"&gt;1&lt;/span&gt; issue &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt; silenced&lt;span class="o"&gt;)&lt;/span&gt;.
+September 10, &lt;span class="m"&gt;2015&lt;/span&gt; - 15:50:09
+Django version 1.8.4, using settings &lt;span class="s1"&gt;&amp;#39;helloworld&amp;#39;&lt;/span&gt;
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Pronto! Nosso ambiente já está rodando na porta 8000, abra seu navegador e digite &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;http://127.0.0.1:8000/&lt;/span&gt;&lt;/tt&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="hello-world"&gt;
+&lt;h2&gt;Hello World&lt;/h2&gt;
+&lt;p&gt;Ok, nosso ambiente está rodando, porém ainda temos erros. O que aconteceu?&lt;/p&gt;
+&lt;p&gt;Se você visualizar no terminal onde o ambiente está sendo executado, verá a seguinte mensagem:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;AttributeError: &lt;span class="s1"&gt;&amp;#39;Settings&amp;#39;&lt;/span&gt; object has no attribute &lt;span class="s1"&gt;&amp;#39;ROOT_URLCONF&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Para encontrar as views* que serão renderizadas no projeto, o Django procura primeiro as configurações no
+arquivo apontado pelo &lt;tt class="docutils literal"&gt;ROOT_URLCONF&lt;/tt&gt;.&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;uma view é uma função responsável por retornar algo para ser renderizado no browser, pode ser um html, um arquivo, um json e etc. *&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Como toda nossa aplicação ficará por enquanto no arquivo &lt;tt class="docutils literal"&gt;helloworld.py&lt;/tt&gt;, vamos apontar nosso &lt;tt class="docutils literal"&gt;ROOT_URLCONF&lt;/tt&gt; para ele.&lt;/p&gt;
+&lt;p&gt;Abra o arquivo &lt;tt class="docutils literal"&gt;helloworld.py&lt;/tt&gt; e insira o seguinte código:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;helloworld&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;span class="n"&gt;ROOT_URLCONF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Estamos dizendo ao Django que nossas &lt;cite&gt;urls&lt;/cite&gt; estão nesse arquivo, para reconhecer as urls, o django procura
+pela variável &lt;tt class="docutils literal"&gt;urlpatterns&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Logo, nosso arquivo deve ficar assim:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;helloworld&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;span class="n"&gt;ROOT_URLCONF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt;
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Agora, se abrirmos nosso navegador no endereço &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;http://127.0.0.1:8000/&lt;/span&gt;&lt;/tt&gt; já recebemos a página de bem vindo do Django =DDD&lt;/p&gt;
+&lt;img alt="itworked" src="images/itworked.png" /&gt;
+&lt;div class="section" id="nossa-primeira-view"&gt;
+&lt;h3&gt;Nossa primeira view&lt;/h3&gt;
+&lt;p&gt;Agora sim, tudo está pronto para criarmos nossa primeira view!&lt;/p&gt;
+&lt;p&gt;Vamos criar nossa view chamada &lt;tt class="docutils literal"&gt;hello_world&lt;/tt&gt;, toda view recebe como primeiro o &lt;tt class="docutils literal"&gt;request&lt;/tt&gt;,
+e precisa retornar alguma resposta para o navegador, vamos retornar um &lt;tt class="docutils literal"&gt;HttpResponse&lt;/tt&gt; com o texto
+&lt;em&gt;Django na prática - Hello World!&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Modifique seu &lt;tt class="docutils literal"&gt;helloworld.py&lt;/tt&gt; para que fique assim:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.http&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;HttpResponse&lt;/span&gt;
+
+
+&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;helloworld&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;span class="n"&gt;ROOT_URLCONF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;hello_world&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;HttpResponse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Django na prática - Hello World!&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Pronto! Temos nossa view criada, porém ainda não conseguimos acessá-la.
+Precisamos dizer ao framework como essa view pode ser encontrada e para qual &lt;tt class="docutils literal"&gt;url&lt;/tt&gt; ela deve responder.&lt;/p&gt;
+&lt;p&gt;Façamos dessa forma:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf.urls&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.http&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;HttpResponse&lt;/span&gt;
+
+
+&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;helloworld&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;span class="n"&gt;ROOT_URLCONF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;hello_world&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;HttpResponse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Django na prática - Hello World!&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;r&amp;#39;^$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;hello_world&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Dentro do &lt;tt class="docutils literal"&gt;urlpatterns&lt;/tt&gt; nós informamos quais são as urls disponíveis no nosso projeto.
+Fazemos isso usando utilizado uma expressão regular associada à uma função, que no nosso caso é o &lt;tt class="docutils literal"&gt;hello_world&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Agora, se abrirmos o navegador, iremos nos deparar com o seguinte resultado:&lt;/p&gt;
+&lt;img alt="hello world" src="images/helloworld.png" /&gt;
+&lt;p&gt;Por hoje é isso!!! Guarde o arquivo criado hoje, pois ele será utilizado nas próximas aulas!&lt;/p&gt;
+&lt;p&gt;Até a próxima =)&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</summary><category term="python"></category><category term="django"></category><category term="django-na-pratica"></category></entry><entry><title>Como otimizar suas consultas no Django - De N a 1 em 20 minutos</title><link href="/django-introducao-queries.html" rel="alternate"></link><updated>2015-05-10T13:55:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2015-05-10:django-introducao-queries.html</id><summary type="html">&lt;p&gt;Essa semana fiz uma palestra em um BEV no &lt;a class="reference external" href="http://luizalabs.com/"&gt;Luizalabs&lt;/a&gt;.
+Resolvi falar sobre Django, pois é um framework que utilizamos na empresa para diversos projetos.&lt;/p&gt;
+&lt;p&gt;O objetivo é ensinar algumas técnicas simples e que auxiliam a diminuir o número de consultas que realizamos
+no banco de dados.de&lt;/p&gt;
+&lt;p&gt;Os slides podem acessados &lt;a class="reference external" href="https://docs.google.com/presentation/d/1SV27J8rFfORxE_JrU5NPahfqDJk6y87MuQUeKVTA0Gw/edit?usp=sharing"&gt;aqui&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Então, vamos lá!&lt;/p&gt;
+&lt;div class="section" id="overview"&gt;
+&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;Geralmente nossa aplicação Django tem um arquivo &lt;tt class="docutils literal"&gt;models.py&lt;/tt&gt;, que contém nossa representação das tabelas no banco de dados.&lt;/p&gt;
+&lt;p&gt;Para os próximos exemplos considere esse arquivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.contrib.auth.models&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;User&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Cadastro&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c"&gt;# chave estrangeira para o usuário&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;OneToOneField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;User&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c"&gt;# Outros campos&lt;/span&gt;
+    &lt;span class="c"&gt;# [...]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Veja o exemplo abaixo, é muito comum ver algo parecido em algum tutorial sobre Django.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Mas o que realmente acontece quando fazemos isso?&lt;/p&gt;
+&lt;p&gt;Para que a consulta aconteça, 5 elementos principais precisam interagir entre si.
+Os elementos são:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Model&lt;/span&gt;
+&lt;span class="n"&gt;Manager&lt;/span&gt;
+&lt;span class="n"&gt;QuerySet&lt;/span&gt;
+&lt;span class="n"&gt;Query&lt;/span&gt;
+&lt;span class="n"&gt;SQLCompiler&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;É importante entender o papel de cada um, para que sejamos capazes de atuar com assertividade.&lt;/p&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;&lt;strong&gt;Model&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;É uma representação da nossa tabela de dados, contém os campos e os comportamentos dos dados que estamos armazenando.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;Manager&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;Está sempre acoplado a um model e é responsável por expor os métodos do QuerySet.
+Quando não declaramos nenhum manager, o Django cria por padrão o &lt;tt class="docutils literal"&gt;objects&lt;/tt&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;QuerySet&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;QuerySet é um conjunto de ações que serão realizadas no banco de dados (select, insert, update ou delete).
+Responsável por interagir diretamente com a Query.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;Query&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;Cria uma estrutura de dados complexa com todos os elementos presentes em uma consulta.
+Gera uma representação SQL de um QuerySet.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;SQLCompiler&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;Recebe as instruções SQL e realiza as operações no banco de dados.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;Agora que conhecemos os 5 elementos principais, vamos falar sobre &lt;strong&gt;QuerySet&lt;/strong&gt;, é com ele
+que vamos conseguir construir queries mais eficientes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="querysets-sao-lazy"&gt;
+&lt;h2&gt;QuerySets são Lazy&lt;/h2&gt;
+&lt;p&gt;Algo que é importante notar sobre o comportamento das QuerySets, são que elas são Lazy.&lt;/p&gt;
+&lt;p&gt;Mas o que é isso?&lt;/p&gt;
+&lt;p&gt;Imaginem as seguintes consultas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;ativos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;filter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ativo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;inativos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;filter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;inativo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Sabe quantas consultas foram realizadas no banco de dados, por essas 3 linhas de código? NENHUMA.
+QuerySets podem ser:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Construídas&lt;/li&gt;
+&lt;li&gt;Filtradas&lt;/li&gt;
+&lt;li&gt;Limitadas&lt;/li&gt;
+&lt;li&gt;Ordenadas&lt;/li&gt;
+&lt;li&gt;Passadas comoo parâmetro&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;E nenhuma consulta será realizada no banco de dados.&lt;/p&gt;
+&lt;p&gt;Quando dizemos que as QuerySets são lazy, queremos dizer que as consultas só serão realizadas no banco de dados, quando pedimos!&lt;/p&gt;
+&lt;p&gt;Então, como pedimos?&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Quando solicitamos somente um resultado&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="c"&gt;# Quando fazemos um slicing passando o parâmetro `step`&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()[::&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="c"&gt;# Quando fazemos uma iteração&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()]&lt;/span&gt;
+
+&lt;span class="c"&gt;# Quando chamamos o método len()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+
+&lt;span class="c"&gt;# Quando chamamos o método list()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+
+ &lt;span class="c"&gt;# Quando chamamos o método bool()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+
+&lt;span class="c"&gt;# Quando chamamos o método repr()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;repr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Uma vez que entendemos como as consultas são realizadas no banco de dados, vamos aprender como resolver os problemas mais comuns quando se trata de consultas: relacionamentos.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="relacionamento-onetoone-e-foreignkey"&gt;
+&lt;h2&gt;Relacionamento OneToOne e ForeignKey&lt;/h2&gt;
+&lt;p&gt;OneToOne e ForeignKey são os tipos de relacionamentos mais comuns no Django, estamos utilizando-os quase intuitivamente.&lt;/p&gt;
+&lt;p&gt;Imaginem o seguinte cenário:&lt;/p&gt;
+&lt;p&gt;Temos um loop e a cada iteração invocamos um atributo do models que é uma chave estrangeira para outra tabela.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="mi"&gt;500&lt;/span&gt; &lt;span class="c"&gt;# Temos 500 cadastros no nosso banco de dados&lt;/span&gt;
+
+&lt;span class="c"&gt;# Fazemos uma iteração em todos os cadastros&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="c"&gt;# realizamos um print com o nome do usuário para tal cadastro.&lt;/span&gt;
+    &lt;span class="c"&gt;# note que essa poderia ser qualquer outra operação, onde o atributo `user` fosse acessado&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Esse é um código simples e que geralmente não vemos problemas nenhum, mas iremos nos supreender
+com quantas queries são realizadas no banco de dados.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# https://docs.djangoproject.com/en/1.8/faq/models/#how-can-i-see-the-raw-sql-queries-django-is-running&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;501&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Foram realizadas &lt;strong&gt;501&lt;/strong&gt; consultas para iterar sobre 500 cadastros (1 consulta para retornar todos os cadastros e 1 consulta para cada vez que acessamos o atributo &lt;tt class="docutils literal"&gt;user&lt;/tt&gt;).
+Isso ocorre, porque estamos acessando um atributo que é um relacionamento para outra tabela,
+cada vez que o Django acessa esse atributo uma nova consulta precisa ser realizada no banco de dados.&lt;/p&gt;
+&lt;p&gt;Isso é válido tanto para OneToOne e ForeignKey.&lt;/p&gt;
+&lt;p&gt;Como podemos resolver isso? Utilizando o método do QuerySet chamado &lt;tt class="docutils literal"&gt;select_related&lt;/tt&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="select-related"&gt;
+&lt;h2&gt;select_related&lt;/h2&gt;
+&lt;p&gt;Veja o mesmo código sendo executado com &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/querysets/#select-related"&gt;select_related&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;select_related&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;O objetivo do &lt;tt class="docutils literal"&gt;select_related&lt;/tt&gt; é realizar uma única query que une todos os &lt;tt class="docutils literal"&gt;models&lt;/tt&gt; relacionados.
+Ele faz isso através de um &lt;tt class="docutils literal"&gt;JOIN&lt;/tt&gt; na instrução &lt;tt class="docutils literal"&gt;SQL&lt;/tt&gt;, então realiza o cache do atributo para que possa acessá-lo sem realizar uma nova consulta.&lt;/p&gt;
+&lt;p&gt;O único problema do &lt;tt class="docutils literal"&gt;select_related&lt;/tt&gt; é que não funciona para campos &lt;strong&gt;ManyToMany&lt;/strong&gt; e &lt;strong&gt;Relacionamentos Reversos&lt;/strong&gt;, mas para esses casos temos o &lt;tt class="docutils literal"&gt;prefetch_related&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Primeiro, vamos entender o que é um relacionamento reverso.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="relacionamento-reverso"&gt;
+&lt;h2&gt;Relacionamento reverso&lt;/h2&gt;
+&lt;p&gt;Por padrão o Django adiciona um relacionamento reverso quando sua tabela é referenciada por uma chave estrangeira.&lt;/p&gt;
+&lt;p&gt;Se não passar o parâmetro related_name, irá seguir o padrão &amp;lt;nome_tabela&amp;gt;_set&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.contrib.auth.models&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;User&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Cadastro&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;OneToOneField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;User&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c"&gt;# Outros campos&lt;/span&gt;
+    &lt;span class="c"&gt;# [...]&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Endereco&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ForeignKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c"&gt;# Outros campos&lt;/span&gt;
+    &lt;span class="c"&gt;# [...]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Dessa forma, criamos um relacionamento reverso no model &lt;tt class="docutils literal"&gt;Cadastro&lt;/tt&gt;, quando referenciamos ele numa chave estrangeira no model &lt;tt class="docutils literal"&gt;Endereco&lt;/tt&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+
+    &lt;span class="c"&gt;# Uma vez que o relacionamento foi criado, podemos acessá-lo&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;endereco_set&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Se houvesse o parâmetro &lt;cite&gt;related_name&lt;/cite&gt;, acessariamos pelo nome que criamos.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Endereco&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ForeignKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;related_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;enderecos&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c"&gt;# Outros campos&lt;/span&gt;
+    &lt;span class="c"&gt;# [...]&lt;/span&gt;
+
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="c"&gt;# Acessando através do related_name&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;enderecos&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Relacionamentos reversos não são possíveis com o &lt;tt class="docutils literal"&gt;select_related&lt;/tt&gt;, por isso criou-se a partir da versão 1.4 o método &lt;tt class="docutils literal"&gt;prefetch_reĺated&lt;/tt&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="prefetch-related"&gt;
+&lt;h2&gt;prefetch_related&lt;/h2&gt;
+&lt;p&gt;Ao acessar um &lt;strong&gt;relacionamento reverso&lt;/strong&gt; ou atributo &lt;strong&gt;ManyToMany&lt;/strong&gt;, assim como vimos para &lt;strong&gt;OneToOne&lt;/strong&gt; e &lt;strong&gt;ForeignKey&lt;/strong&gt;, uma nova consulta será realizada.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;enderecos&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;501&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Para esses casos, utilizamos o &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/querysets/#django.db.models.query.QuerySet.prefetch_related"&gt;prefetch_related&lt;/a&gt;, ela tem o comportamento similar ao &lt;tt class="docutils literal"&gt;select_related&lt;/tt&gt; como diferença principal que o &lt;tt class="docutils literal"&gt;JOIN&lt;/tt&gt; é realizado no &lt;tt class="docutils literal"&gt;Python&lt;/tt&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prefetch_related&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;enderecos&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;enderecos&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Legal, aprendemos a como diminuir o número de consultas que realizamos quando desejamos retirar alguma informação do banco de dados, mas e quando desejamos inserir, atualizar e deletar?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="inserir-dados"&gt;
+&lt;h2&gt;Inserir dados&lt;/h2&gt;
+&lt;p&gt;Um problema para inserir dados é quando precisamos iterar sobre um conjunto grande de informações e criar um registro para cada linha, usos comum para importações e logs.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;nomes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;Lucas&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Teste 01&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Teste 02&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Nome 3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c"&gt;# 1000 nomes no total&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="c"&gt;# Inserimos um cadastro para cada nome que existe na nossa variável `nomes`&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;nome&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;nomes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nome&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;nome&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;1000&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;E acessamos 1000 vezes o banco de dados para criar todos os cadastros.
+Existe um método chamado &lt;tt class="docutils literal"&gt;bulk_create&lt;/tt&gt;, que resolve nosso problema.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;nomes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;Lucas&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Teste 01&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Teste 02&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Nome 3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c"&gt;# 1000 nomes no total&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;nome&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;nomes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+   &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nome&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;nome&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+   &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Insere todos os cadastros de uma só vez&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bulk_create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;O &lt;strong&gt;bulk_create&lt;/strong&gt; recebe uma lista de cadastros e cria realizando somente uma query.
+É bom notar que cada item dentro da variável &lt;tt class="docutils literal"&gt;cadastros&lt;/tt&gt; é uma representação do modelo de Cadastro.&lt;/p&gt;
+&lt;blockquote&gt;
+Não funciona para relacionamentos &lt;strong&gt;ManyToMany&lt;/strong&gt; e que os &lt;tt class="docutils literal"&gt;signals&lt;/tt&gt; do Django &lt;tt class="docutils literal"&gt;pre_save&lt;/tt&gt; e &lt;tt class="docutils literal"&gt;post_save&lt;/tt&gt; não serão chamados,
+pois o método &lt;tt class="docutils literal"&gt;save&lt;/tt&gt; não é utilizado nesse caso.&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="atualizar-dados"&gt;
+&lt;h2&gt;Atualizar dados&lt;/h2&gt;
+&lt;p&gt;Muitas vezes precisamos atualizar um conjunto de dados e fazemos isso através de uma iteração sobre cada objeto e alterando o campo que desejamos.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;notificado&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+    &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;501&lt;/span&gt; &lt;span class="c"&gt;# 1 consulta para retornar os cadastros e 1 para cada item no loop&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;E cada vez que chamamos o método &lt;tt class="docutils literal"&gt;save&lt;/tt&gt; uma nova consulta é realizada.&lt;/p&gt;
+&lt;p&gt;Para esses casos podemos utilizar o método &lt;tt class="docutils literal"&gt;update&lt;/tt&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;notificado&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;500&lt;/span&gt; &lt;span class="c"&gt;# Retorna a quantidade de itens que foram atualizados&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;O &lt;strong&gt;update&lt;/strong&gt; realiza um &lt;strong&gt;SQL Update&lt;/strong&gt; no banco de dados e retorna a quantidade de linhas que foram atualizados.&lt;/p&gt;
+&lt;blockquote&gt;
+Os &lt;tt class="docutils literal"&gt;signals&lt;/tt&gt; do Django &lt;tt class="docutils literal"&gt;pre_save&lt;/tt&gt; e &lt;tt class="docutils literal"&gt;post_save&lt;/tt&gt; não serão chamados,
+pois o método &lt;tt class="docutils literal"&gt;save&lt;/tt&gt; não é utilizado nesse caso.&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="deletar-dados"&gt;
+&lt;h2&gt;Deletar dados&lt;/h2&gt;
+&lt;p&gt;O mesmo comportamento existe quando estamos removendo alguns dados.
+Se fosse preciso apagar todos os dados, seria comum se alguém escrevesse assim:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;cadastro&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;cadastros&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;501&lt;/span&gt; &lt;span class="c"&gt;# 1 consulta para retornar os cadastros e 1 para cada item no loop&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Porém, pode-se fazer dessa maneira:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;connection&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;connection&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;queries&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;QuerySet possui um método chamado &lt;strong&gt;delete&lt;/strong&gt; que apaga todos os dados retornados.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Apagar somente inativos&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;filter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;inativo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c"&gt;# Apagar somente ativos&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Cadastro&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;filter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ativo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Deve-se lembrar, que assim como o &lt;strong&gt;update&lt;/strong&gt; e o &lt;strong&gt;bulk_create&lt;/strong&gt; os signals do Django não serão chamados, no caso do &lt;strong&gt;delete&lt;/strong&gt; os signals são &lt;tt class="docutils literal"&gt;pre_delete&lt;/tt&gt; e &lt;tt class="docutils literal"&gt;pos_delete&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Espero que tenha ajudado, até a próxima!&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="python"></category><category term="django"></category></entry><entry><title>Django - 3 anos em 10 minutos</title><link href="/django-overview-10-minutos.html" rel="alternate"></link><updated>2015-04-06T11:55:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2015-04-06:django-overview-10-minutos.html</id><summary type="html">&lt;p&gt;Em março de 2012 foi lançada a versão 1.4 e por aqui que nossa jornada começa, o objetivo não é entrar em detalhes em todas as features que foram implementadas e sim um &lt;cite&gt;overview&lt;/cite&gt; sobre as que considero mais importantes para nosso dia a dia.&lt;/p&gt;
+&lt;div class="section" id="versao-1-4-ha-3-anos"&gt;
+&lt;h2&gt;Versão &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.4/releases/1.4/"&gt;1.4&lt;/a&gt; (Há 3 anos)&lt;/h2&gt;
+&lt;p&gt;Lançada em Março de 2012, suporta Python 2.5 &amp;gt;= 2.7.&lt;/p&gt;
+&lt;p&gt;Foi a primeira versão LTS (long-term support), ou seja, ela recebeu correções e atualizações de segurança por pelo menos 3 anos após à data de lançamento.&lt;/p&gt;
+&lt;p&gt;É a primeira versão a permitir o uso de &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.4/ref/django-admin/#django-admin-startproject"&gt;custom project template&lt;/a&gt; e tornar o arquivo &lt;cite&gt;manage.py&lt;/cite&gt; &lt;em&gt;o&lt;/em&gt; que conhecemos hoje.&lt;/p&gt;
+&lt;p&gt;Foi a primeira versão a suportar o &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.4/topics/testing/#django.test.LiveServerTestCase"&gt;testes&lt;/a&gt; feitos com frameworks que utilizam o browser como o &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-1.html"&gt;Selenium&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Algumas outras coisas legais foram:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/1.4/ref/models/querysets/#django.db.models.query.QuerySet.bulk_create"&gt;bulk_create&lt;/a&gt; para criar vários objetos de uma só vez.&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/1.4/ref/models/querysets/#django.db.models.query.QuerySet.prefetch_related"&gt;prefetch_related&lt;/a&gt; para realizar &lt;cite&gt;joins&lt;/cite&gt; em tabelas que possuem relações &lt;cite&gt;many-to-many&lt;/cite&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/1.4/topics/http/urls/#reverse-lazy"&gt;reverse_lazy&lt;/a&gt; que permite fazer &lt;cite&gt;reverse&lt;/cite&gt; antes das configurações de URL serem carregadas.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="versao-1-5-ha-2-anos"&gt;
+&lt;h2&gt;Versão &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.5/releases/1.5/"&gt;1.5&lt;/a&gt; (Há 2 anos)&lt;/h2&gt;
+&lt;p&gt;Lançada em Fevereiro de 2013, suporta Python 2.6.5 &amp;gt;= 2.7 (Python 3 - Experimental).&lt;/p&gt;
+&lt;p&gt;A versão 1.5 ficou bem conhecida pela reformulação na aplicação de autenticação, é possível &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.5/topics/auth/customizing/#auth-custom-user"&gt;customizar um usuário&lt;/a&gt; conforme nossas necessidades.&lt;/p&gt;
+&lt;p&gt;É possivel também passar os campos que você &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.5/ref/models/instances/#specifying-which-fields-to-save"&gt;gostaria de atualizar&lt;/a&gt; quando for salvar um objeto.&lt;/p&gt;
+&lt;p&gt;Algumas outras coisas legais foram:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#std:templatetag-verbatim"&gt;verbatim&lt;/a&gt; template tag para casos onde você deseja ignorar a sintaxe do template.&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/1.5/releases/1.5/#new-tutorials"&gt;novos tutoriais&lt;/a&gt; foram inseridos para ajudar iniciantes e existe também uma seção &lt;cite&gt;Tutoriais Avançados&lt;/cite&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="versao-1-6-ha-1-ano-e-meio"&gt;
+&lt;h2&gt;Versão &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.6/releases/1.6/"&gt;1.6&lt;/a&gt; (Há 1 ano e meio)&lt;/h2&gt;
+&lt;p&gt;Lançada em Novembro de 2013, suporta Python 2.6.5 &amp;gt;= 3.3. (Python 3!!!!)&lt;/p&gt;
+&lt;p&gt;A versão 1.6 alterou um pouco do &lt;cite&gt;layout&lt;/cite&gt; padrão dos projetos que estávamos acostumados, para nossa alegria o &lt;cite&gt;admin.py&lt;/cite&gt; é adicionado por padrão na aplicação :)&lt;/p&gt;
+&lt;p&gt;Transações possuem &lt;cite&gt;autocommit&lt;/cite&gt; habilitado por padrão!&lt;/p&gt;
+&lt;p&gt;Os testes são localizados em qualquer arquivo que possua o nome começando com &lt;strong&gt;test_&lt;/strong&gt; (Antigamente os testes só eram encontrados nos arquivos models.py e tests.py)&lt;/p&gt;
+&lt;p&gt;Algumas outras coisas legais foram:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/1.6/ref/django-admin/#django-admin-check"&gt;check&lt;/a&gt; comando para validar se suas configurações estão compatíveis com a versão do django.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="versao-1-7-ha-8-meses"&gt;
+&lt;h2&gt;Versão &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.7/releases/1.7/"&gt;1.7&lt;/a&gt; (Há 8 meses)&lt;/h2&gt;
+&lt;p&gt;Lançada em Setembro de 2014, suporta Python 2.7 &amp;gt;= 3.4.&lt;/p&gt;
+&lt;p&gt;Um novo conceito de &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/migrations/"&gt;migrações&lt;/a&gt; foi implementado, até o momento a maioria utilizava o &lt;a class="reference external" href="https://south.readthedocs.org/en/latest/"&gt;South&lt;/a&gt;, nessa versão tudo é &lt;cite&gt;built-in&lt;/cite&gt;.&lt;/p&gt;
+&lt;p&gt;Para criar uma aplicação não é necessário mais conter o arquivo &lt;cite&gt;models.py&lt;/cite&gt;.&lt;/p&gt;
+&lt;p&gt;O &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/applications/"&gt;conceito de aplicação&lt;/a&gt; foi atualizado e existem vários novas maneiras de se customizar seus dados :)&lt;/p&gt;
+&lt;p&gt;O comando &lt;cite&gt;check&lt;/cite&gt; foi evoluído e agora realiza uma varredura quase completa no seu código para identificar possíveis problemas.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="versao-1-8"&gt;
+&lt;h2&gt;Versão &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/1.8/"&gt;1.8&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Lançada em Abril de 2015, a versão 1.8 introduz várias features legais!&lt;/p&gt;
+&lt;p&gt;É a segunda versão LTS (long-term support), ou seja, vai receber correções e atualizações de segurança por pelo menos 3 anos após à data de lançamento.&lt;/p&gt;
+&lt;p&gt;Agora há a possibilidade de utilizar &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/topics/templates/"&gt;várias linguagens(engines)&lt;/a&gt; de templates, ou seja, você pode usar simuntaneamente (não no mesmo arquivo) a &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/templates/language/"&gt;Django Template Language&lt;/a&gt; ou &lt;a class="reference external" href="http://jinja.pocoo.org/"&gt;Jinja2&lt;/a&gt;. Há uma API padronizada para quem quiser adicionar suporte para outras linguagens de template no futuro. Há um &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/templates/upgrading/"&gt;guia de migração&lt;/a&gt; .&lt;/p&gt;
+&lt;p&gt;Novos campos foram introduzidos como &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.UUIDField"&gt;UUIDField&lt;/a&gt; e &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.DurationField"&gt;DurationField&lt;/a&gt; e  ainda tem mais!&lt;/p&gt;
+&lt;p&gt;O &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/1.8/#model-meta-api"&gt;Model._meta API&lt;/a&gt; foi totalmente refatorado e padronizado. O &lt;cite&gt;Model._meta&lt;/cite&gt; API foi incluida no Django 0.96 e serve para obter informações sobre campos do Model, contudo, essa api era considerada de uso privado, e não tinha qualquer documentação ou comentários. Agora com tudo padronizado, abre uma gama de novas opções para criar apps plugaveis que fazem coisas com Models arbitrarios.&lt;/p&gt;
+&lt;p&gt;Algumas outras coisas legais foram:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;O comando de gerenciamento &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/howto/legacy-databases/#integrating-django-with-a-legacy-database"&gt;inspectdb&lt;/a&gt; agora suporta fazer engenharia reversa tambem de Database Views (nas versões anteriores, o inspectdb inspecionava somente tabelas, mas não conseguia &amp;quot;ver&amp;quot; as views).&lt;/li&gt;
+&lt;li&gt;Adição/Melhoria de &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/1.8/#query-expressions-conditional-expressions-and-database-functions"&gt;Query Expressions, Conditional Expressions, and Database Functions&lt;/a&gt; . Isso adiciona muito mais flexibilidade para fazer pesquisas mais complexas no banco de dados.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Há várias outras ótimas melhorias que omiti, veja o &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/"&gt;release note&lt;/a&gt; completo.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="o-futuro"&gt;
+&lt;h2&gt;O Futuro&lt;/h2&gt;
+&lt;div class="section" id="versao-1-9-com-lancamento-previsto-para-outubro-de-2016"&gt;
+&lt;h3&gt;Versão 1.9 (Com lançamento previsto para Outubro de 2016)&lt;/h3&gt;
+&lt;p&gt;O Django 1.8 mal foi lançado, e já há algumas novidades que talvez venham no Django 1.9.&lt;/p&gt;
+&lt;p&gt;Muito provavelmete, o Django 1.9 vai adicionar os tão esperados &lt;a class="reference external" href="https://github.com/django/deps/pull/12"&gt;Campos Compostos&lt;/a&gt; . Isso vai permitir fazer coisas mais complexas, como ter um campo Dinheiro, que &amp;quot;sabe&amp;quot; como fazer conversões de moeda (ex. Real para Dolar).&lt;/p&gt;
+&lt;p&gt;Tambem existe uma expectativa que o tema &lt;a class="reference external" href="https://pypi.python.org/pypi/django-flat-theme"&gt;django-flat-admin&lt;/a&gt; para o &lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/contrib/admin/"&gt;Admin&lt;/a&gt; seja integrado no Django 1.9, virando o tema padrão. O &lt;a class="reference external" href="https://pypi.python.org/pypi/django-flat-theme"&gt;django-flat-admin&lt;/a&gt; somente modifica o CSS, nenhuma tag HTML é alterada em relação ao HTML original do Admin, então ele é relativemente compativel (desde que você não tenha incluido customizações no CSS do Admin). Os core developers do Django estão tratando desse assunto &lt;a class="reference external" href="https://groups.google.com/forum/#!msg/django-developers/HJAikaEBqJ4/pxj1SuwbJm0J"&gt;neste tópico&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Veja o &lt;a class="reference external" href="https://code.djangoproject.com/wiki/Version1.9Roadmap"&gt;Roadmap&lt;/a&gt; do que vem por ai no Django 1.9&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</summary><category term="python"></category><category term="django"></category></entry><entry><title>Selenium - O que você deveria saber - Parte 4</title><link href="/selenium-parte-4.html" rel="alternate"></link><updated>2014-07-28T11:55:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2014-07-28:selenium-parte-4.html</id><summary type="html">&lt;p&gt;Esse é o quarto post da série sobre Selenium, hoje você irá aprender a fazer algumas coisas mais interessantes!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Veja a &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-1.html"&gt;primeira parte&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Veja a &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html"&gt;segunda parte&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Veja a &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-3.html"&gt;terceira parte&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Esse post será o mais longo, então prepare-se!&lt;/p&gt;
+&lt;div class="section" id="parte-4"&gt;
+&lt;h2&gt;Parte 4&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#expected-conditions"&gt;Expected conditions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#actionschains-operacoes-avancadas"&gt;ActionsChains - Operações avançadas&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#eventlistener-ouvindo-seu-codigo"&gt;EventListener - Ouvindo seu código&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;div class="section" id="expected-conditions"&gt;
+&lt;h3&gt;Expected conditions&lt;/h3&gt;
+&lt;p&gt;Em alguns casos você precisa esperar para manipular o elemento até que uma condição se satisfaça, para isso o Selenium possui um conjunto de &lt;strong&gt;funções&lt;/strong&gt; para facilitar na maioria das situações.&lt;/p&gt;
+&lt;p&gt;Essas condições são chamadas &lt;tt class="docutils literal"&gt;expected conditions&lt;/tt&gt;, abaixo a lista das principais condições:&lt;/p&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;title_is&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se o título (title) da página corresponde ao informado (comparação exata).
+Retorna True ou False.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;title_contains&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se o título contém a string informada (case-sensitive).
+Retorna True ou False.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;presence_of_element_located&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se o elemento está presente no DOM (ele não precisa estar visível).
+Retorna o elemento se ele estiver presente ou False.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;visibility_of_element_located&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se o elemento está presente no DOM e visível (ele precisa ter width e height maior que 0).
+Retorna o elemento se ele estiver visível ou False.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;text_to_be_present_in_element&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se o texto está presente no elemento.
+Retorna True ou False.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;text_to_be_present_in_element_value&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se o texto está presente no atributo &amp;quot;value&amp;quot; do elemento.
+Retorna True ou False.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;element_to_be_clickable&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se o elemento está visível e disponível para ser clicado.
+Retorna o elemento ou False.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;alert_is_present&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Checa se existe algum alerta na página.
+Retorna o alerta ou False.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;&lt;em&gt;Todas as funções estão no arquivo: selenium/webdriver/support/expected_conditions.py&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Você pode utilizar essas funções em conjunto com o que foi aprendido na &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html#e-se-eu-quiser-esperar"&gt;Parte 2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Exemplos de uso:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Importar classe para inicializar o browser&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+&lt;span class="c"&gt;# Importar a classe WebDriverWait&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.support.ui&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;WebDriverWait&lt;/span&gt;
+&lt;span class="c"&gt;# Importar a classe que contém as funções e aplicar um alias&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.support&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;expected_conditions&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;EC&lt;/span&gt;
+&lt;span class="c"&gt;# Importar classe para ajudar a localizar os elementos&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.common.by&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;By&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="c"&gt;# Instanciar a classe que irá esperar até 5 segundos&lt;/span&gt;
+&lt;span class="n"&gt;wait&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;WebDriverWait&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar até que a página tenha o título &amp;quot;PythonClub&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title_is&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;PythonClub&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar página contenha o título &amp;quot;PythonClub&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title_contains&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;PythonClub&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar até que o elemento &amp;quot;id_elemento&amp;quot; esteja presente no DOM&lt;/span&gt;
+&lt;span class="n"&gt;elemento&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;presence_of_element_located&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;By&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;id_elemento&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar até que o elemento &amp;quot;id_elemento&amp;quot; esteja visível&lt;/span&gt;
+&lt;span class="n"&gt;elemento&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;visibility_of_element_located&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;By&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;id_elemento&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar até que o elemento &amp;quot;id_elemento&amp;quot; contenha o texto &amp;quot;Python&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text_to_be_present_in_element&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;By&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;id_elemento&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Python&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar até que o elemento &amp;quot;id_elemento&amp;quot; contenha o valor &amp;quot;Python&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text_to_be_present_in_element_value&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;By&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;id_elemento&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Python&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar até que o elemento &amp;quot;id_elemento&amp;quot; possa ser clicado&lt;/span&gt;
+&lt;span class="n"&gt;elemento&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;element_to_be_clickable&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;By&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;id_elemento&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Aguardar até que um alerta esteja presente na página&lt;/span&gt;
+&lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EC&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alert_is_present&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Após os 5 segundos, se a condição retornar &lt;tt class="docutils literal"&gt;False&lt;/tt&gt; será gerado uma exception &lt;tt class="docutils literal"&gt;TimeoutException&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Use a abuse das &lt;tt class="docutils literal"&gt;conditions&lt;/tt&gt;!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="actionschains-operacoes-avancadas"&gt;
+&lt;h3&gt;ActionsChains - Operações avançadas&lt;/h3&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;click_and_hold(on_element=None)&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Clica no elemento e mantém o botão esquerdo do mouse pressionado. Se o parâmetro &lt;tt class="docutils literal"&gt;on_element&lt;/tt&gt; não for informado, será realizado na posição atual do mouse.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;release(on_element=None)&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Despressiona o botão do mouse. Se o parâmetro &lt;tt class="docutils literal"&gt;on_element&lt;/tt&gt; for informado, será realizado no elemento.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;context_click(on_element=None)&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Clica no elemento com o botão direito do mouse. Se o parâmetro &lt;tt class="docutils literal"&gt;on_element&lt;/tt&gt; não for informado, será realizado na posição atual do mouse.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;double_click(on_element=None)&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Realiza o clique duplo. Se o parâmetro &lt;tt class="docutils literal"&gt;on_element&lt;/tt&gt; não for informado, será realizado na posição atual do mouse.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;key_down(value, element=None)&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Simula uma tecla sendo pressionada e mantida assim. (Deve ser utilizada somente com as teclas de modificação &lt;strong&gt;Control&lt;/strong&gt;, &lt;strong&gt;Alt&lt;/strong&gt; e &lt;strong&gt;Shift&lt;/strong&gt;). Se o parâmetro &lt;tt class="docutils literal"&gt;element&lt;/tt&gt; não for informado, será realizado no elemento atual.&lt;/dd&gt;
+&lt;dt&gt;&lt;tt class="docutils literal"&gt;key_up(value, element=None)&lt;/tt&gt;&lt;/dt&gt;
+&lt;dd&gt;Simula uma tecla sendo despressionada. (Deve ser utilizada somente com as teclas de modificação &lt;strong&gt;Control&lt;/strong&gt;, &lt;strong&gt;Alt&lt;/strong&gt; e &lt;strong&gt;Shift&lt;/strong&gt;). Se o parâmetro &lt;tt class="docutils literal"&gt;element&lt;/tt&gt; não for informado, será realizado no elemento atual.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;As ações são armazenadas na ordem em que foram invocadas e para que sejam realizadas é preciso chamar o metódo &lt;tt class="docutils literal"&gt;perform&lt;/tt&gt; da instância.&lt;/p&gt;
+&lt;p&gt;Exemplos de uso:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Importar classe para inicializar o browser&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+&lt;span class="c"&gt;# Importar a classe ActionChains responsável pelas manipulações&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.common.action_chains&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ActionChains&lt;/span&gt;
+&lt;span class="c"&gt;# Importar a classe Keys que podem ser utilizadas no key_up e key_down&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.common.keys&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Keys&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ActionChains&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+
+&lt;span class="c"&gt;# Clicar e manter na posição atual do mouse&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;click_and_hold&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="c"&gt;# Voltar o mouse para o estado inicial&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;release&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="c"&gt;# Disparar metódo para que as ações sejam executadas&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+
+&lt;span class="n"&gt;botao&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;#botaoqualquer&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c"&gt;# Clicar e manter em um botão&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;click_and_hold&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;on_element&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;botao&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+
+&lt;span class="c"&gt;# Clicar com o botão direito na posição atual do mouse&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;context_click&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c"&gt;# Clique duplo&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;double_click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;on_element&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;botao&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c"&gt;# Exemplo com key_down e key_up. Simular um CTRL + C&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;key_down&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Keys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CONTROL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Pressionar o CTRL&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;send_keys&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;c&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Pressionar o C&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;key_up&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Keys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CONTROL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Liberar o CTRL&lt;/span&gt;
+&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Tem algumas outras ações bem interessantes, vale dar uma olhada no arquivo.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Você pode visualizar as outras funções em: selenium/webdriver/common/action_chains.py&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="eventlistener-ouvindo-seu-codigo"&gt;
+&lt;h3&gt;EventListener - Ouvindo seu código&lt;/h3&gt;
+&lt;div class="section" id="introducao"&gt;
+&lt;h4&gt;Introdução&lt;/h4&gt;
+&lt;p&gt;O Selenium provê uma forma bem simples para que possa monitorar tudo que está sendo feito pelo navegador.
+Para cada ação pode ser disparado um evento e esse evento pode ser &amp;quot;ouvido&amp;quot; por seu &lt;tt class="docutils literal"&gt;EventListener&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;É necessário que a instância do navegador seja passada para uma &lt;tt class="docutils literal"&gt;classe&lt;/tt&gt; que irá disparar todos os eventos e então construir seu &lt;tt class="docutils literal"&gt;EventListener&lt;/tt&gt; para ouvi-lá.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="listener"&gt;
+&lt;h4&gt;Listener&lt;/h4&gt;
+&lt;p&gt;A classe &lt;tt class="docutils literal"&gt;AbstractEventListener&lt;/tt&gt; foi construída para ser herdada e alterada.
+Cada metódo da classe será executado quando determinado evento for disparado.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;AbstractEventListener&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes de uma url ser acessada pelo metódo &amp;quot;get&amp;quot; do webdriver&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_navigate_to&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado após uma url ser acessada pelo metódo &amp;quot;get&amp;quot; do webdriver&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_navigate_to&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;   &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que o metódo &amp;quot;back&amp;quot; do webdriver seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_navigate_back&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado depois que o metódo &amp;quot;back&amp;quot; do webdriver seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_navigate_back&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que o metódo &amp;quot;forward&amp;quot; do webdriver seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_navigate_forward&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado depois que o metódo &amp;quot;forward&amp;quot; do webdriver seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_navigate_forward&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;   &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que o metódo &amp;quot;find(s)_element(s)_by_*&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;by&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;   &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado após que o metódo &amp;quot;find(s)_element(s)_by_*&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;by&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;    &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que o metódo &amp;quot;click&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;    &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado após que o metódo &amp;quot;click&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que o metódo &amp;quot;clear&amp;quot; ou &amp;quot;send_keys&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_change_value_of&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado após que o metódo &amp;quot;clear&amp;quot; ou &amp;quot;send_keys&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_change_value_of&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;   &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que o metódo &amp;quot;execute_script&amp;quot; ou &amp;quot;execute_async_script&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_execute_script&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;script&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;    &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado após que o metódo &amp;quot;execute_script&amp;quot; ou &amp;quot;execute_async_script&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_execute_script&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;script&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que uma página seja fechada com o metódo &amp;quot;close&amp;quot;&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_close&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado após que uma página seja fechada com o metódo &amp;quot;close&amp;quot;&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_close&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado antes que o metódo &amp;quot;quit&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_quit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será invocado depois que o metódo &amp;quot;quit&amp;quot; seja executado&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_quit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;   &lt;span class="k"&gt;pass&lt;/span&gt;
+
+  &lt;span class="c"&gt;# Será executado sempre que houver uma exeception&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;on_exception&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;exception&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="k"&gt;pass&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Arquivo: selenium/webdriver/support/abstract_event_listener.py&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="dispatch"&gt;
+&lt;h4&gt;Dispatch&lt;/h4&gt;
+&lt;p&gt;A classe &lt;tt class="docutils literal"&gt;EventFiringWebDriver&lt;/tt&gt; é responsável por disparar os eventos do navegador.
+Para que ela funcione é necessário passar uma instância do navegador e um &lt;tt class="docutils literal"&gt;EventListener&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Arquivo: selenium/webdriver/support/event_firing_webdriver.py&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="seu-proprio-listener"&gt;
+&lt;h4&gt;Seu próprio Listener&lt;/h4&gt;
+&lt;p&gt;Vamos criar um &lt;tt class="docutils literal"&gt;EventListener&lt;/tt&gt; simples para utilizarmos no nosso exemplo.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.support.events&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;AbstractEventListener&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;MyListener&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AbstractEventListener&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_navigate_to&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Antes de abrir a url &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_navigate_to&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Depois de abrir a url &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Antes de clicar no elemento&amp;quot;&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Depois de clicar no elemento&amp;quot;&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_close&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Antes de fechar a pagina&amp;quot;&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_close&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Depois de fechar a pagina&amp;quot;&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;on_exception&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;exeception&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Ocorreu um erro&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Para criar um &lt;tt class="docutils literal"&gt;EventListener&lt;/tt&gt; é preciso criar uma classe que herde da &lt;tt class="docutils literal"&gt;AbstractEventListener&lt;/tt&gt; e
+implementar os metódos que serão invocados a cada evento ou criar uma classe com os mesmos metódos.&lt;/p&gt;
+&lt;p&gt;Salve o código em um arquivo chamado &amp;quot;mylistener.py&amp;quot; para testes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="juntando-tudo"&gt;
+&lt;h4&gt;Juntando tudo&lt;/h4&gt;
+&lt;p&gt;Para que tudo funcione corretamente, você precisa primeiro importar as bibliotecas necessárias.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# para instanciar o navegador&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="c"&gt;# EventFiringWebdriver para disparar os eventos&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.support.events&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EventFiringWebDriver&lt;/span&gt;
+
+&lt;span class="c"&gt;# Importe o seu Listener&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;mylistener&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;MyListener&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Depois criar as instâncias:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;listener&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;MyListener&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c"&gt;# Firefox com os eventos sendo disparados&lt;/span&gt;
+&lt;span class="n"&gt;ef_firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;EventFiringWebDriver&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;listener&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Agora é só executar algumas ações e você verá as informações sendo &amp;quot;printadas&amp;quot; na tela.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# abrir página da python club&lt;/span&gt;
+&lt;span class="n"&gt;ef_firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://pythonclub.com.br/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;        Propositalmente irá gerar uma exception pois a classe não existe.&lt;/span&gt;
+&lt;span class="sd"&gt;        O evento &amp;quot;on_exception&amp;quot; deve ser chamado&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;post&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ef_firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;post-tile&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;except&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;pass&lt;/span&gt;
+
+&lt;span class="c"&gt;# localizamos o primeiro post&lt;/span&gt;
+&lt;span class="n"&gt;post&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ef_firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;post-title&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# clicar no elemento&lt;/span&gt;
+&lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;click&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c"&gt;# fechar a página&lt;/span&gt;
+&lt;span class="n"&gt;ef_firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Resultado:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&amp;gt;&amp;gt; python mylistener.py
+
+Antes de abrir a url http://pythonclub.com.br/
+Depois de abrir a url http://pythonclub.com.br/
+Ocorreu um erro
+Antes de clicar no elemento
+Depois de clicar no elemento
+Antes de fechar a pagina
+Depois de fechar a pagina
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Código completo: &lt;a class="reference external" href="https://github.com/LucasMagnum/selenium-serie/blob/master/mylistener.py"&gt;mylistener.py&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Agora você pode explorar o &lt;tt class="docutils literal"&gt;AbstractEventListener&lt;/tt&gt; e o &lt;tt class="docutils literal"&gt;EventFiringWebdriver&lt;/tt&gt; e construir seu próprio &lt;tt class="docutils literal"&gt;EventListener&lt;/tt&gt; de acordo com suas necessidades.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="the-end"&gt;
+&lt;h3&gt;The End&lt;/h3&gt;
+&lt;p&gt;Acredito que esse seja o último post sobre Selenium, espero que tenham gostado!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</summary><category term="selenium"></category><category term="python"></category><category term="selenium-serie"></category></entry><entry><title>Selenium - O que você deveria saber - Parte 3</title><link href="/selenium-parte-3.html" rel="alternate"></link><updated>2014-06-02T10:49:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2014-06-02:selenium-parte-3.html</id><summary type="html">&lt;p&gt;Esse é o terceiro post da série sobre Selenium, hoje vamos aprender a executar código javascript e usar diferentes navegadores.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Veja a &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-1.html"&gt;primeira parte&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Veja a &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html"&gt;segunda parte&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;div class="section" id="parte-3"&gt;
+&lt;h2&gt;Parte 3&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#executando-codigo-javascript"&gt;Executando código javascript&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#como-utilizar-diferentes-navegadores"&gt;Como utilizar diferentes navegadores&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;div class="section" id="executando-codigo-javascript"&gt;
+&lt;h3&gt;Executando código javascript&lt;/h3&gt;
+&lt;p&gt;Algumas vezes é necessário executar algum código &lt;tt class="docutils literal"&gt;javascript&lt;/tt&gt;, seja para adiantar a execução de uma função
+ou até mesmo para manipular um elemento.&lt;/p&gt;
+&lt;p&gt;Vamos ao nosso exemplo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://google.com.br/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;execute_script&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;alert(&amp;quot;código javascript sendo executado&amp;quot;)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;execute_async_script&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;alert(&amp;quot;código javascript sendo executado&amp;quot;)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;O Selenium permite que você faça isso através de uma instância do navegador, chamando os metódos &lt;tt class="docutils literal"&gt;execute_script&lt;/tt&gt; e &lt;tt class="docutils literal"&gt;execute_async_script&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;A diferença entre os dois é que o primeiro (&lt;tt class="docutils literal"&gt;execute_script&lt;/tt&gt;) irá esperar até ter a resposta do navegador e o outro não.&lt;/p&gt;
+&lt;p&gt;Você pode executar qualquer código javascript e isso pode ser muito útil!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="como-utilizar-diferentes-navegadores"&gt;
+&lt;h3&gt;Como utilizar diferentes navegadores&lt;/h3&gt;
+&lt;p&gt;Para utilizar navegadores diferentes é bem simples, vamos ver como configurar 2 navegadores diferentes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="firefox"&gt;
+&lt;h2&gt;Firefox&lt;/h2&gt;
+&lt;p&gt;O &lt;em&gt;Firefox&lt;/em&gt; é o mais simples de ser configurado, você não precisa passar nenhum parâmetro adicional.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Se a instalação do firefox tiver sido alterada e feito em alguma pasta diferente da padrão, você pode informar o caminho para o executável.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox_binary&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/bin/firefox&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# se estiver usando o windows, basta informar o caminho completo&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox_binary&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;C:/firefox/firefox.exe&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="chrome"&gt;
+&lt;h2&gt;Chrome&lt;/h2&gt;
+&lt;p&gt;Para utilizar &lt;em&gt;Chrome&lt;/em&gt; você precisa ter instalado o chrome no seu computador, você pode fazer isso pelo terminal:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;apt-get install chromium-browser
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Após instalar o navegador você precisa realizar o download do &lt;tt class="docutils literal"&gt;chromedriver&lt;/tt&gt; que é um intermediário entre o Selenium o e Chrome.&lt;/p&gt;
+&lt;p&gt;Por default o Selenium procura pelo &lt;tt class="docutils literal"&gt;chromedriver&lt;/tt&gt; na mesma pasta de onde está sendo executado.&lt;/p&gt;
+&lt;p&gt;Faça o download da ultima versão do &lt;a class="reference external" href="http://chromedriver.storage.googleapis.com/index.html"&gt;chromedriver&lt;/a&gt;, coloque em um local de sua preferência e passe o caminho completo na hora de iniciar o navegador.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="n"&gt;chrome&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Chrome&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;executable_path&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;caminho para chromedriver&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# exemplo&lt;/span&gt;
+&lt;span class="n"&gt;chrome&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Chrome&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;executable_path&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/home/lucasmagnum/downloads/chromedriver&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Você pode visualizar todos os navegadores &lt;a class="reference external" href="http://docs.seleniumhq.org/about/platforms.jsp"&gt;suportados&lt;/a&gt; pelo Selenium&lt;/p&gt;
+&lt;p&gt;Por hoje é só!
+Nos vemos na próxima, espero que tenha aprendido algo hoje :)&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="selenium"></category><category term="python"></category><category term="selenium-serie"></category></entry><entry><title>Selenium - O que você deveria saber - Parte 2</title><link href="/selenium-parte-2.html" rel="alternate"></link><updated>2014-05-23T14:49:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2014-05-23:selenium-parte-2.html</id><summary type="html">&lt;p&gt;Esse é o segundo post da série sobre Selenium, hoje vamos aprender a manipular formulários, frames e múltiplas janelas.
+Vamos também vai descobrir que é possível esperar para tentar encontrar um elemento na página.&lt;/p&gt;
+&lt;p&gt;Se você não leu a primeira parte, clique &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-1.html"&gt;aqui&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="section" id="parte-2"&gt;
+&lt;h2&gt;Parte 2&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#brincando-com-formularios"&gt;Brincando com formulários&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#trabalhando-com-multiplas-janelas"&gt;Trabalhando com múltiplas janelas&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#trabalhando-com-frames"&gt;Trabalhando com frames&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#e-se-eu-quiser-esperar"&gt;E se eu quiser esperar?!&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;div class="section" id="brincando-com-formularios"&gt;
+&lt;h3&gt;Brincando com formulários&lt;/h3&gt;
+&lt;p&gt;Quantas vezes você já não preencheu um formulário na web?&lt;/p&gt;
+&lt;p&gt;Hoje vamos aprender como fazer isso, vamos visualizar o exemplo abaixo que procura por um termo no google.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.common.keys&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Keys&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://google.com.br/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# pegar o campo de busca onde podemos digitar algum termo&lt;/span&gt;
+&lt;span class="n"&gt;campo_busca&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;q&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Digitar &amp;quot;Python Club&amp;quot; no campo de busca&lt;/span&gt;
+&lt;span class="n"&gt;campo_busca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;send_keys&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Python Club&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Simular que o enter seja precisonado&lt;/span&gt;
+&lt;span class="n"&gt;campo_busca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;send_keys&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Keys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ENTER&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Foi bem simples, encontramos o &lt;tt class="docutils literal"&gt;campo_busca&lt;/tt&gt; e invocamos o metódo &lt;tt class="docutils literal"&gt;send_keys&lt;/tt&gt; com o texto
+que desejamos digitar e depois simulamos o pressionamento do botão &amp;quot;Enter&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Nota&lt;/strong&gt;: Sempre que houver a necessidade de utilizar uma tecla especial podemos encontrá-la na classe &lt;tt class="docutils literal"&gt;Keys&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;E se for um campo &lt;tt class="docutils literal"&gt;select&lt;/tt&gt;, como eu faço?&lt;/p&gt;
+&lt;p&gt;Digamos que exista o seguinte código:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;select&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;estados&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;option&lt;/span&gt; &lt;span class="na"&gt;value=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;mg&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;MG&lt;span class="nt"&gt;&amp;lt;/option&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;option&lt;/span&gt; &lt;span class="na"&gt;value=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;rj&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;RJ&lt;span class="nt"&gt;&amp;lt;/option&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;option&lt;/span&gt; &lt;span class="na"&gt;value=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;sp&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;SP&lt;span class="nt"&gt;&amp;lt;/option&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Existe uma classe só para facilitar o trabalho com &lt;tt class="docutils literal"&gt;selects&lt;/tt&gt;, ela possui metódos para selecionar uma opção pelo seu texto ou valor, entre outras.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Importar a classe Select&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.support.ui&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Select&lt;/span&gt;
+
+&lt;span class="c"&gt;# É preciso passar o elemento para a classe&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;estados&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;estados&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c"&gt;# Selecionar a opção MG&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;estados&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;select_by_visible_text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;MG&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Selecionar a opção SP&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;estados&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;select_by_value&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;sp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Agora você já sabe o básico para manipular um formulário, você pode digitar nos campos, selecionar valores, clicar em botões.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="trabalhando-com-multiplas-janelas"&gt;
+&lt;h3&gt;Trabalhando com múltiplas janelas&lt;/h3&gt;
+&lt;p&gt;E quando se abre uma nova janela? ou um alerta? O que fazemos?&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window_handles&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;u&amp;#39;{7fd12d82-4fb3-48a4-a8b9-e1e460c00236}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;A instância &lt;tt class="docutils literal"&gt;firefox&lt;/tt&gt; possui um atributo chamado &lt;tt class="docutils literal"&gt;window_handles&lt;/tt&gt;, que é uma lista
+contendo um ID para cada janela aberta.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Nota&lt;/strong&gt;: O ID é criado para nova janela aberta e não para uma ABA ou um alerta javascript.&lt;/p&gt;
+&lt;p&gt;Quando você abrir uma nova janela, poderá perceber que é criado automaticamente um novo ID.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window_handles&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;u&amp;#39;{7fd12d82-4fb3-48a4-a8b9-e1e460c00236}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;u&amp;#39;{2ce4de19-0902-48e3-a1cc-50f6378afd79}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Para alternar entre janelas, basta chamar o metódo &lt;tt class="docutils literal"&gt;switch_to_window&lt;/tt&gt; passando o ID da janela como parâmetro.&lt;/p&gt;
+&lt;p&gt;Imagine que temos uma janela aberta na página do Google e a outra na página da Python Club.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window_handles&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;u&amp;#39;{7fd12d82-4fb3-48a4-a8b9-e1e460c00236}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;u&amp;#39;{2ce4de19-0902-48e3-a1cc-50f6378afd79}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="c"&gt;# Título da janela atual&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;
+&lt;span class="s"&gt;u&amp;#39;Google&amp;#39;&lt;/span&gt;
+
+&lt;span class="c"&gt;# Trocar para a última janela da lista&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;switch_to_window_handles&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window_handles&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;
+&lt;span class="s"&gt;u&amp;#39;PythonClub //&amp;#39;&lt;/span&gt;
+
+&lt;span class="c"&gt;# Fechar a janela atual&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c"&gt;# Voltar para a janela do Google&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;switch_to_window_handles&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window_handles&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;
+&lt;span class="s"&gt;u&amp;#39;Google&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;E como saber o ID da janela atual? Simples!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;current_window_handle&lt;/span&gt;
+&lt;span class="s"&gt;u&amp;#39;{7fd12d82-4fb3-48a4-a8b9-e1e460c00236}&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Fácil não?!&lt;/p&gt;
+&lt;p&gt;E se abrir um alerta &lt;tt class="docutils literal"&gt;javascript&lt;/tt&gt;, como fazemos???&lt;/p&gt;
+&lt;p&gt;Existe uma função para tratar alertas &lt;tt class="docutils literal"&gt;javascript&lt;/tt&gt;, a função &lt;tt class="docutils literal"&gt;switch_to_alert&lt;/tt&gt; irá permitir que manipule eles sem problemas.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;alerta&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;switch_to_alert&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;  &lt;span class="c"&gt;# Tab para autocomplete&lt;/span&gt;
+&lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;accept&lt;/span&gt;     &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dismiss&lt;/span&gt;    &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;driver&lt;/span&gt;     &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;send_keys&lt;/span&gt;  &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;
+
+&lt;span class="c"&gt;# Se for um `confirm`, você pode aceitar ou cancelar.&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;accept&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;  &lt;span class="c"&gt;# Aceitar, ou clicar em &amp;quot;OK&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dismiss&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c"&gt;# Cancelar, ou clicar em &amp;quot;Cancel&amp;quot;/&amp;quot;Cancelar&amp;quot;&lt;/span&gt;
+
+&lt;span class="c"&gt;# Se for uma caixa de texto e você quiser digitar algo&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;send_keys&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Digitar esse texto&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Se você quiser visualizar o texto que está presente no alerta&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;alerta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;
+&lt;span class="s"&gt;u&amp;#39;Texto do alerta&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="trabalhando-com-frames"&gt;
+&lt;h3&gt;Trabalhando com frames&lt;/h3&gt;
+&lt;p&gt;Não existe muita diferença entre manipulação de frames e janelas, o princípio é o mesmo.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Encontrar o elemento (metódo &lt;tt class="docutils literal"&gt;find_element&lt;/tt&gt;)&lt;/li&gt;
+&lt;li&gt;Mudar para ele (metódo &lt;tt class="docutils literal"&gt;switch_to_frame&lt;/tt&gt;)&lt;/li&gt;
+&lt;li&gt;Realizar as ações&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;div class="section" id="conceitos"&gt;
+&lt;h4&gt;Conceitos&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Por padrão o frame principal ou aquele que está disponível quando você abre uma página é denominado &lt;tt class="docutils literal"&gt;default_content&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Se algum elemento estiver dentro de um frame você não irá localizá-lo sem &amp;quot;entrar&amp;quot; neste frame.&lt;/p&gt;
+&lt;p&gt;Se você estiver dentro de um frame e o elemento estiver no &lt;tt class="docutils literal"&gt;default_content&lt;/tt&gt; você não conseguirá localizá-lo sem voltar para o frame principal.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;Exemplo&lt;/em&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Precisamos clicar em um botão que está dentro de um frame.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Premissas&lt;/strong&gt;: O iframe onde estão os botões que precisamos manipular possui o ID &lt;tt class="docutils literal"&gt;buttons&lt;/tt&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Vamos tentar localizar o botão que está dentro do frame e será gerado uma Exception&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;botao_id&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;NoSuchElementException&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Message&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;u&amp;#39;Unable to locate element: {&amp;quot;method&amp;quot;:&amp;quot;id&amp;quot;,&amp;quot;selector&amp;quot;:&amp;quot;&amp;lt;botao_id&amp;gt;&amp;quot;}&amp;#39;&lt;/span&gt;
+
+&lt;span class="c"&gt;# Precisamos antes encontrar o frame&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;frame&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;buttons&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Vamos alterar para ele&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;switch_to_frame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Agora podemos encontrar o elemento&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;botao&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;botao_id&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# E podemos manipulá-lo :)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;botao&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;click&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="e-se-eu-quiser-esperar"&gt;
+&lt;h3&gt;E se eu quiser esperar?!&lt;/h3&gt;
+&lt;p&gt;Quando você tenta localizar um elemento, o Selenium irá consultar a página e se não encontrar será gerado uma &lt;tt class="docutils literal"&gt;exception&lt;/tt&gt; de imediato.&lt;/p&gt;
+&lt;p&gt;Mas e se o elemento demorar um pouco para aparecer, pode ser que ele faça parte de uma animação, um consulta &lt;tt class="docutils literal"&gt;ajax&lt;/tt&gt; ou qualquer coisa do tipo.&lt;/p&gt;
+&lt;p&gt;Então precisamos dizer ao Selenium para &lt;strong&gt;esperar&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Existe uma classe chamada &lt;tt class="docutils literal"&gt;WebDriverWait&lt;/tt&gt; que pode ser utilizada para para esperar por determinadas ações.&lt;/p&gt;
+&lt;p&gt;Hoje será apresentado o básico sobre ela e voltaremos a falar sobre na Parte 4 deste tutorial.&lt;/p&gt;
+&lt;p&gt;Veja o exemplo abaixo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;elemento&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;elemento_id&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Nesse caso se o elemento não existe, será gerado uma &lt;tt class="docutils literal"&gt;exception&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Mas e se soubermos que ele pode demorar um tempo para aparecer?&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Importar a classe WebDriverWait&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.support.ui&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;WebDriverWait&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;esperar_pelo_elemento&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;elemento_id&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;elemento&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;WebDriverWait&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;esperar_pelo_elemento&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;O que fizemos? Nós pedimos para o &lt;tt class="docutils literal"&gt;firefox&lt;/tt&gt; esperar por &lt;tt class="docutils literal"&gt;5&lt;/tt&gt; segundos até que o resultado da função &lt;tt class="docutils literal"&gt;esperar_pelo_elemento&lt;/tt&gt; seja &lt;tt class="docutils literal"&gt;True&lt;/tt&gt;. Caso passe esse tempo e ele não encontre o elemento, então será gerada uma &lt;tt class="docutils literal"&gt;exception&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Essa foi nossa introdução ao &lt;tt class="docutils literal"&gt;WebDriverWait&lt;/tt&gt;, basicamente você precisa passar uma função que aceite como parâmetro a instância do navegador e lá executar o código para encontrar o elemento.&lt;/p&gt;
+&lt;p&gt;Por hoje é só!
+Nos vemos na próxima, espero que tenha aprendido algo hoje :)&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</summary><category term="selenium"></category><category term="python"></category><category term="selenium-serie"></category></entry><entry><title>Selenium - O que você deveria saber - Parte 1</title><link href="/selenium-parte-1.html" rel="alternate"></link><updated>2014-05-08T12:09:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2014-05-08:selenium-parte-1.html</id><summary type="html">&lt;p&gt;Esse é o primeiro post da série sobre Selenium, pretendo cobrir desde o básico até algumas coisas mais legais :)&lt;/p&gt;
+&lt;div class="section" id="introducao"&gt;
+&lt;h2&gt;Introdução&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://docs.seleniumhq.org/"&gt;Selenium&lt;/a&gt; é um ótimo framework para realizar diversos tipos de tarefas com o browser.&lt;/p&gt;
+&lt;p&gt;Nesta série, vou tentar compartilhar com vocês o que acredito ser necessário para o bom uso da ferramenta.&lt;/p&gt;
+&lt;p&gt;Veja como está organizada a série:&lt;/p&gt;
+&lt;div class="section" id="parte-i"&gt;
+&lt;h3&gt;Parte I&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#instalacao"&gt;Instalação&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#abrindo-uma-pagina"&gt;Abrindo uma página&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#manipulando-elementos"&gt;Manipulando elementos&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="parte-2"&gt;
+&lt;h3&gt;Parte 2&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html#brincando-com-formularios"&gt;Brincando com formulários&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html#trabalhando-com-multiplas-janelas"&gt;Trabalhando com múltiplas janelas&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html#trabalhando-com-frames"&gt;Trabalhando com frames&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html#e-se-eu-quiser-esperar"&gt;E se eu quiser esperar?!&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="parte-3"&gt;
+&lt;h3&gt;Parte 3&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-3.html#executando-codigo-javascript"&gt;Executando código javascript&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-3.html#como-utilizar-diferentes-navegadores"&gt;Como utilizar diferentes navegadores&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div class="section" id="parte-4"&gt;
+&lt;h3&gt;Parte 4&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-4.html#expected-conditions"&gt;Expected conditions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-4.html#actionschains-operacoes-avancadas"&gt;ActionsChains - Operações avançadas&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-4.html#eventlistener-ouvindo-seu-codigo"&gt;EventListener - Ouvindo seu código&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="instalacao"&gt;
+&lt;h2&gt;Instalação&lt;/h2&gt;
+&lt;p&gt;Para instalar o Selenium não existe nenhum segredo, basta executar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pip install selenium
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="abrindo-uma-pagina"&gt;
+&lt;h2&gt;Abrindo uma página&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://google.com.br&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Vamos entender o que está acontecendo aqui.&lt;/p&gt;
+&lt;p&gt;Primeiro eu importo o &lt;tt class="docutils literal"&gt;webdriver&lt;/tt&gt; que é o módulo que provê implementações para diferentes browsers.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Nesse caso utilizaremos o &amp;quot;Mozila Firefox&amp;quot;, pois não precisa de nenhuma configuração adicional, basta que ele esteja instalado.&lt;/p&gt;
+&lt;p&gt;Então criamos uma instância chamada &lt;tt class="docutils literal"&gt;firefox&lt;/tt&gt; e depois invocamos o metódo &lt;tt class="docutils literal"&gt;get&lt;/tt&gt; passando como parâmetro a URL da página que desejamos abrir.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://google.com.br/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Outros exemplos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Abrir o site da Python Brasil&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://python.org.br/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Abrir o site da Python MG&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://pythonmg.com.br/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="manipulando-elementos"&gt;
+&lt;h2&gt;Manipulando elementos&lt;/h2&gt;
+&lt;p&gt;Sempre existe a necessidade de manipularmos algum elemento da página,
+para isso você precisa saber como encontrá-lo.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Conhecimento em HTML é necessário para facilitar a manipulação da página&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Se precisarmos encontrar um elemento pelo id, invocamos o metódo &lt;tt class="docutils literal"&gt;find_element_by_id&lt;/tt&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Se o elemento não for encontrado uma exception é gerada&lt;/span&gt;
+&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;id&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Se precisarmos encontrar todos os elementos que possuem uma classe específica, invocamos o metódo &lt;tt class="docutils literal"&gt;find_elements_by_class_name&lt;/tt&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Retornam vários elementos ou uma lista vazia&lt;/span&gt;
+&lt;span class="n"&gt;find_elements_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;class_name&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Existem diversos metódos disponíveis, abaixo estão os que mais utilizo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Encontrar elemento pelo ID&lt;/span&gt;
+&lt;span class="n"&gt;find_element_by_id&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;id&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Encontrar elemento pelo atributo name&lt;/span&gt;
+&lt;span class="n"&gt;find_element_by_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;name&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Encontrar elemento pelo texto do link&lt;/span&gt;
+&lt;span class="n"&gt;find_element_by_link_text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;text&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Encontrar elemento pelo seu seletor css&lt;/span&gt;
+&lt;span class="n"&gt;find_element_by_css_selector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;css_selector&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Encontrar elementos pelo nome da tag&lt;/span&gt;
+&lt;span class="n"&gt;find_elements_by_tag_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;tag_name&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Encontrar elementos pela classe&lt;/span&gt;
+&lt;span class="n"&gt;find_elements_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&amp;lt;class_name&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Para visualizar todos os metódos, veja a &lt;a class="reference external" href="http://selenium-python.readthedocs.org/locating-elements.html#locating-elements"&gt;documentação&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="section" id="exemplo-para-estudo"&gt;
+&lt;h3&gt;Exemplo para estudo&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;Let's code&lt;/em&gt;&lt;/p&gt;
+&lt;!--  --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Premissas&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;No &lt;a class="reference external" href="http://pythonclub.com.br/"&gt;Python Club&lt;/a&gt; os &lt;tt class="docutils literal"&gt;posts&lt;/tt&gt; estão localizados dentro de uma &lt;tt class="docutils literal"&gt;div&lt;/tt&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;div&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;posts&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;section&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;[...]&lt;span class="nt"&gt;&amp;lt;/section&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;section&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;[...]&lt;span class="nt"&gt;&amp;lt;/section&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;section&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;[...]&lt;span class="nt"&gt;&amp;lt;/section&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;E cada &lt;tt class="docutils literal"&gt;post&lt;/tt&gt; está dentro de uma &lt;tt class="docutils literal"&gt;section&lt;/tt&gt; que possui a &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;class=&amp;quot;post&amp;quot;&lt;/span&gt;&lt;/tt&gt; .&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;section&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;header&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post-header&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    [...]
+    &lt;span class="nt"&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;
+      &lt;span class="nt"&gt;&amp;lt;a&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post-title&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;href=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;lt;post_url&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;post_title&amp;gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+    [...]
+  &lt;span class="nt"&gt;&amp;lt;/header&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/section&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Objetivo&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Queremos que seja mostrado o título de cada &lt;tt class="docutils literal"&gt;post&lt;/tt&gt; e seu &lt;tt class="docutils literal"&gt;link&lt;/tt&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Execute o código abaixo e veja o resultado.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="c"&gt;# Criar instância do navegador&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c"&gt;# Abrir a página do Python Club&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;http://pythonclub.com.br/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Seleciono todos os elementos que possuem a class post&lt;/span&gt;
+&lt;span class="n"&gt;posts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_elements_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;post&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Para cada post printar as informações&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;posts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+
+    &lt;span class="c"&gt;# O elemento `a` com a class `post-title`&lt;/span&gt;
+    &lt;span class="c"&gt;# contém todas as informações que queremos mostrar&lt;/span&gt;
+    &lt;span class="n"&gt;post_title&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;post-title&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c"&gt;# `get_attribute` serve para extrair qualquer atributo do elemento&lt;/span&gt;
+    &lt;span class="n"&gt;post_link&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;post_title&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_attribute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c"&gt;# printar informações&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;u&amp;quot;Títutlo: {titulo}, &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;Link: {link}&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="n"&gt;titulo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;post_title&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;link&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;post_link&lt;/span&gt;
+  &lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Fechar navegador&lt;/span&gt;
+&lt;span class="n"&gt;firefox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Código-fonte do exemplo: &lt;a class="reference external" href="https://github.com/LucasMagnum/selenium-serie/blob/master/pythonclub.py"&gt;pythonclub.py&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="desafios"&gt;
+&lt;h3&gt;Desafios&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Desafio 1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Modificar o exemplo para mostrar o nome do autor do &lt;tt class="docutils literal"&gt;post&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Desafio 2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Modificar o exemplo 01 para salvar os dados(titulo, link, autor) em um arquivo &lt;tt class="docutils literal"&gt;json&lt;/tt&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Gostou? Leia a &lt;a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html"&gt;segunda parte&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Qualquer dúvida pode enviar um e-mail &lt;a class="reference external" href="mailto:lucasmagnumlopes&amp;#64;gmail.com"&gt;lucasmagnumlopes&amp;#64;gmail.com&lt;/a&gt; ficarei feliz em ajudar =)&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</summary><category term="selenium"></category><category term="python"></category><category term="selenium-serie"></category></entry></feed>

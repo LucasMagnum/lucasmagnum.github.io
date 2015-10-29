@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="/theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/pygments.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/font-awesome.min.css">
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lucas Magnum Atom">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+<meta name="author" content="Lucas Magnum" />
+<meta name="description" content="Essa semana fiz uma palestra em um BEV no Luizalabs. Resolvi falar sobre Django, pois é um framework que utilizamos na empresa para diversos projetos. O objetivo é ensinar algumas técnicas simples e que auxiliam a diminuir o número de consultas que realizamos no banco de dados.de Os slides ..." />
+<meta name="keywords" content="python, django">
+<meta property="og:site_name" content="Lucas Magnum"/>
+<meta property="og:title" content="Como otimizar suas consultas no Django - De N a 1 em 20 minutos"/>
+<meta property="og:description" content="Essa semana fiz uma palestra em um BEV no Luizalabs. Resolvi falar sobre Django, pois é um framework que utilizamos na empresa para diversos projetos. O objetivo é ensinar algumas técnicas simples e que auxiliam a diminuir o número de consultas que realizamos no banco de dados.de Os slides ..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/django-introducao-queries.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2015-05-10 13:55:00-03:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/lucas-magnum.html">
+<meta property="article:section" content="Python"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="django"/>
+<meta property="og:image" content="http://lucasmagnum.github.io/theme/img/avatar.jpg">  <title>Lucas Magnum &ndash; Como otimizar suas consultas no Django - De N a 1 em 20 minutos</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="">
+        <img src="http://lucasmagnum.github.io/theme/img/avatar.jpg" alt="Lucas Magnum" title="Lucas Magnum">
+      </a>
+      <h1><a href="">Lucas Magnum</a></h1>
+      <p>Software Developer</p>
+      <nav>
+        <ul class="list">
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/lucasmagnum" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-linkedin" href="https://br.linkedin.com/in/lucasmagnum" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/lmloliveira" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-twitter" href="http://twitter.com/lucasmagn" target="_blank"><i class="fa fa-twitter"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+
+<article>
+  <header>
+    <h1 id="django-introducao-queries">Como otimizar suas consultas no Django - De N a 1 em 20 minutos</h1>
+    <p>Publicado em Dom 10 maio 2015 in <a href="/category/python.html">Python</a></p>
+  </header>
+  <div>
+    <p>Essa semana fiz uma palestra em um BEV no <a class="reference external" href="http://luizalabs.com/">Luizalabs</a>.
+Resolvi falar sobre Django, pois é um framework que utilizamos na empresa para diversos projetos.</p>
+<p>O objetivo é ensinar algumas técnicas simples e que auxiliam a diminuir o número de consultas que realizamos
+no banco de dados.de</p>
+<p>Os slides podem acessados <a class="reference external" href="https://docs.google.com/presentation/d/1SV27J8rFfORxE_JrU5NPahfqDJk6y87MuQUeKVTA0Gw/edit?usp=sharing">aqui</a>.</p>
+<p>Então, vamos lá!</p>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<p>Geralmente nossa aplicação Django tem um arquivo <tt class="docutils literal">models.py</tt>, que contém nossa representação das tabelas no banco de dados.</p>
+<p>Para os próximos exemplos considere esse arquivo:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Cadastro</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c"># chave estrangeira para o usuário</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+
+    <span class="c"># Outros campos</span>
+    <span class="c"># [...]</span>
+</pre></div>
+<p>Veja o exemplo abaixo, é muito comum ver algo parecido em algum tutorial sobre Django.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+<p>Mas o que realmente acontece quando fazemos isso?</p>
+<p>Para que a consulta aconteça, 5 elementos principais precisam interagir entre si.
+Os elementos são:</p>
+<div class="highlight"><pre><span class="n">Model</span>
+<span class="n">Manager</span>
+<span class="n">QuerySet</span>
+<span class="n">Query</span>
+<span class="n">SQLCompiler</span>
+</pre></div>
+<p>É importante entender o papel de cada um, para que sejamos capazes de atuar com assertividade.</p>
+<dl class="docutils">
+<dt><strong>Model</strong></dt>
+<dd><ul class="first last simple">
+<li>É uma representação da nossa tabela de dados, contém os campos e os comportamentos dos dados que estamos armazenando.</li>
+</ul>
+</dd>
+<dt><strong>Manager</strong></dt>
+<dd><ul class="first last simple">
+<li>Está sempre acoplado a um model e é responsável por expor os métodos do QuerySet.
+Quando não declaramos nenhum manager, o Django cria por padrão o <tt class="docutils literal">objects</tt>.</li>
+</ul>
+</dd>
+<dt><strong>QuerySet</strong></dt>
+<dd><ul class="first last simple">
+<li>QuerySet é um conjunto de ações que serão realizadas no banco de dados (select, insert, update ou delete).
+Responsável por interagir diretamente com a Query.</li>
+</ul>
+</dd>
+<dt><strong>Query</strong></dt>
+<dd><ul class="first last simple">
+<li>Cria uma estrutura de dados complexa com todos os elementos presentes em uma consulta.
+Gera uma representação SQL de um QuerySet.</li>
+</ul>
+</dd>
+<dt><strong>SQLCompiler</strong></dt>
+<dd><ul class="first last simple">
+<li>Recebe as instruções SQL e realiza as operações no banco de dados.</li>
+</ul>
+</dd>
+</dl>
+<p>Agora que conhecemos os 5 elementos principais, vamos falar sobre <strong>QuerySet</strong>, é com ele
+que vamos conseguir construir queries mais eficientes.</p>
+</div>
+<div class="section" id="querysets-sao-lazy">
+<h2>QuerySets são Lazy</h2>
+<p>Algo que é importante notar sobre o comportamento das QuerySets, são que elas são Lazy.</p>
+<p>Mas o que é isso?</p>
+<p>Imaginem as seguintes consultas:</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span> <span class="n">ativos</span> <span class="o">=</span> <span class="n">cadastros</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ativo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="n">inativos</span> <span class="o">=</span> <span class="n">cadastros</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">inativo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+<p>Sabe quantas consultas foram realizadas no banco de dados, por essas 3 linhas de código? NENHUMA.
+QuerySets podem ser:</p>
+<blockquote>
+<ul class="simple">
+<li>Construídas</li>
+<li>Filtradas</li>
+<li>Limitadas</li>
+<li>Ordenadas</li>
+<li>Passadas comoo parâmetro</li>
+</ul>
+</blockquote>
+<p>E nenhuma consulta será realizada no banco de dados.</p>
+<p>Quando dizemos que as QuerySets são lazy, queremos dizer que as consultas só serão realizadas no banco de dados, quando pedimos!</p>
+<p>Então, como pedimos?</p>
+<div class="highlight"><pre><span class="c"># Quando solicitamos somente um resultado</span>
+<span class="o">&gt;&gt;</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c"># Quando fazemos um slicing passando o parâmetro `step`</span>
+<span class="o">&gt;&gt;</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[::</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="c"># Quando fazemos uma iteração</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="n">cadastro</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
+
+<span class="c"># Quando chamamos o método len()</span>
+<span class="o">&gt;&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+
+<span class="c"># Quando chamamos o método list()</span>
+<span class="o">&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+
+ <span class="c"># Quando chamamos o método bool()</span>
+<span class="o">&gt;&gt;</span> <span class="nb">bool</span><span class="p">(</span><span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+
+<span class="c"># Quando chamamos o método repr()</span>
+<span class="o">&gt;&gt;</span> <span class="nb">repr</span><span class="p">(</span><span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+</pre></div>
+<p>Uma vez que entendemos como as consultas são realizadas no banco de dados, vamos aprender como resolver os problemas mais comuns quando se trata de consultas: relacionamentos.</p>
+</div>
+<div class="section" id="relacionamento-onetoone-e-foreignkey">
+<h2>Relacionamento OneToOne e ForeignKey</h2>
+<p>OneToOne e ForeignKey são os tipos de relacionamentos mais comuns no Django, estamos utilizando-os quase intuitivamente.</p>
+<p>Imaginem o seguinte cenário:</p>
+<p>Temos um loop e a cada iteração invocamos um atributo do models que é uma chave estrangeira para outra tabela.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastros</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="mi">500</span> <span class="c"># Temos 500 cadastros no nosso banco de dados</span>
+
+<span class="c"># Fazemos uma iteração em todos os cadastros</span>
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="c"># realizamos um print com o nome do usuário para tal cadastro.</span>
+    <span class="c"># note que essa poderia ser qualquer outra operação, onde o atributo `user` fosse acessado</span>
+    <span class="k">print</span> <span class="n">cadastro</span><span class="o">.</span><span class="n">user</span>
+</pre></div>
+<p>Esse é um código simples e que geralmente não vemos problemas nenhum, mas iremos nos supreender
+com quantas queries são realizadas no banco de dados.</p>
+<div class="highlight"><pre><span class="c"># https://docs.djangoproject.com/en/1.8/faq/models/#how-can-i-see-the-raw-sql-queries-django-is-running</span>
+<span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastros</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">cadastro</span><span class="o">.</span><span class="n">user</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">501</span>
+</pre></div>
+<p>Foram realizadas <strong>501</strong> consultas para iterar sobre 500 cadastros (1 consulta para retornar todos os cadastros e 1 consulta para cada vez que acessamos o atributo <tt class="docutils literal">user</tt>).
+Isso ocorre, porque estamos acessando um atributo que é um relacionamento para outra tabela,
+cada vez que o Django acessa esse atributo uma nova consulta precisa ser realizada no banco de dados.</p>
+<p>Isso é válido tanto para OneToOne e ForeignKey.</p>
+<p>Como podemos resolver isso? Utilizando o método do QuerySet chamado <tt class="docutils literal">select_related</tt>.</p>
+</div>
+<div class="section" id="select-related">
+<h2>select_related</h2>
+<p>Veja o mesmo código sendo executado com <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/querysets/#select-related">select_related</a>.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastros</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">cadastro</span><span class="o">.</span><span class="n">user</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">1</span>
+</pre></div>
+<p>O objetivo do <tt class="docutils literal">select_related</tt> é realizar uma única query que une todos os <tt class="docutils literal">models</tt> relacionados.
+Ele faz isso através de um <tt class="docutils literal">JOIN</tt> na instrução <tt class="docutils literal">SQL</tt>, então realiza o cache do atributo para que possa acessá-lo sem realizar uma nova consulta.</p>
+<p>O único problema do <tt class="docutils literal">select_related</tt> é que não funciona para campos <strong>ManyToMany</strong> e <strong>Relacionamentos Reversos</strong>, mas para esses casos temos o <tt class="docutils literal">prefetch_related</tt>.</p>
+<p>Primeiro, vamos entender o que é um relacionamento reverso.</p>
+</div>
+<div class="section" id="relacionamento-reverso">
+<h2>Relacionamento reverso</h2>
+<p>Por padrão o Django adiciona um relacionamento reverso quando sua tabela é referenciada por uma chave estrangeira.</p>
+<p>Se não passar o parâmetro related_name, irá seguir o padrão &lt;nome_tabela&gt;_set</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Cadastro</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+
+    <span class="c"># Outros campos</span>
+    <span class="c"># [...]</span>
+
+<span class="k">class</span> <span class="nc">Endereco</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cadastro</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cadastro</span><span class="p">)</span>
+
+    <span class="c"># Outros campos</span>
+    <span class="c"># [...]</span>
+</pre></div>
+<p>Dessa forma, criamos um relacionamento reverso no model <tt class="docutils literal">Cadastro</tt>, quando referenciamos ele numa chave estrangeira no model <tt class="docutils literal">Endereco</tt>.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+
+    <span class="c"># Uma vez que o relacionamento foi criado, podemos acessá-lo</span>
+    <span class="k">print</span> <span class="n">cadastro</span><span class="o">.</span><span class="n">endereco_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+<p>Se houvesse o parâmetro <cite>related_name</cite>, acessariamos pelo nome que criamos.</p>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Endereco</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cadastro</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cadastro</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;enderecos&#39;</span><span class="p">)</span>
+
+    <span class="c"># Outros campos</span>
+    <span class="c"># [...]</span>
+
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="c"># Acessando através do related_name</span>
+    <span class="k">print</span> <span class="n">cadastro</span><span class="o">.</span><span class="n">enderecos</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+<p>Relacionamentos reversos não são possíveis com o <tt class="docutils literal">select_related</tt>, por isso criou-se a partir da versão 1.4 o método <tt class="docutils literal">prefetch_reĺated</tt>.</p>
+</div>
+<div class="section" id="prefetch-related">
+<h2>prefetch_related</h2>
+<p>Ao acessar um <strong>relacionamento reverso</strong> ou atributo <strong>ManyToMany</strong>, assim como vimos para <strong>OneToOne</strong> e <strong>ForeignKey</strong>, uma nova consulta será realizada.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastros</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">cadastro</span><span class="o">.</span><span class="n">enderecos</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">501</span>
+</pre></div>
+<p>Para esses casos, utilizamos o <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/querysets/#django.db.models.query.QuerySet.prefetch_related">prefetch_related</a>, ela tem o comportamento similar ao <tt class="docutils literal">select_related</tt> como diferença principal que o <tt class="docutils literal">JOIN</tt> é realizado no <tt class="docutils literal">Python</tt>.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastros</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="s">&#39;enderecos&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">cadastro</span><span class="o">.</span><span class="n">enderecos</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">1</span>
+</pre></div>
+<p>Legal, aprendemos a como diminuir o número de consultas que realizamos quando desejamos retirar alguma informação do banco de dados, mas e quando desejamos inserir, atualizar e deletar?</p>
+</div>
+<div class="section" id="inserir-dados">
+<h2>Inserir dados</h2>
+<p>Um problema para inserir dados é quando precisamos iterar sobre um conjunto grande de informações e criar um registro para cada linha, usos comum para importações e logs.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+<span class="o">&gt;&gt;</span> <span class="n">nomes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">&#39;Lucas&#39;</span><span class="p">,</span> <span class="s">&#39;Teste 01&#39;</span><span class="p">,</span> <span class="s">&#39;Teste 02&#39;</span><span class="p">,</span> <span class="s">&#39;Nome 3&#39;</span><span class="p">,</span> <span class="c"># 1000 nomes no total</span>
+<span class="p">]</span>
+
+<span class="c"># Inserimos um cadastro para cada nome que existe na nossa variável `nomes`</span>
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">nome</span> <span class="ow">in</span> <span class="n">nomes</span><span class="p">:</span>
+    <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">nome</span><span class="o">=</span><span class="n">nome</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">1000</span>
+</pre></div>
+<p>E acessamos 1000 vezes o banco de dados para criar todos os cadastros.
+Existe um método chamado <tt class="docutils literal">bulk_create</tt>, que resolve nosso problema.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+<span class="o">&gt;&gt;</span> <span class="n">nomes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">&#39;Lucas&#39;</span><span class="p">,</span> <span class="s">&#39;Teste 01&#39;</span><span class="p">,</span> <span class="s">&#39;Teste 02&#39;</span><span class="p">,</span> <span class="s">&#39;Nome 3&#39;</span><span class="p">,</span> <span class="c"># 1000 nomes no total</span>
+<span class="p">]</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">nome</span> <span class="ow">in</span> <span class="n">nomes</span><span class="p">:</span>
+   <span class="n">cadastro</span> <span class="o">=</span> <span class="n">Cadastro</span><span class="p">(</span><span class="n">nome</span><span class="o">=</span><span class="n">nome</span><span class="p">)</span>
+   <span class="n">cadastros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cadastro</span><span class="p">)</span>
+
+<span class="c"># Insere todos os cadastros de uma só vez</span>
+<span class="o">&gt;&gt;</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span><span class="n">cadastros</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">1</span>
+</pre></div>
+<p>O <strong>bulk_create</strong> recebe uma lista de cadastros e cria realizando somente uma query.
+É bom notar que cada item dentro da variável <tt class="docutils literal">cadastros</tt> é uma representação do modelo de Cadastro.</p>
+<blockquote>
+Não funciona para relacionamentos <strong>ManyToMany</strong> e que os <tt class="docutils literal">signals</tt> do Django <tt class="docutils literal">pre_save</tt> e <tt class="docutils literal">post_save</tt> não serão chamados,
+pois o método <tt class="docutils literal">save</tt> não é utilizado nesse caso.</blockquote>
+</div>
+<div class="section" id="atualizar-dados">
+<h2>Atualizar dados</h2>
+<p>Muitas vezes precisamos atualizar um conjunto de dados e fazemos isso através de uma iteração sobre cada objeto e alterando o campo que desejamos.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="n">cadastro</span><span class="o">.</span><span class="n">notificado</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">cadastro</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">501</span> <span class="c"># 1 consulta para retornar os cadastros e 1 para cada item no loop</span>
+</pre></div>
+<p>E cada vez que chamamos o método <tt class="docutils literal">save</tt> uma nova consulta é realizada.</p>
+<p>Para esses casos podemos utilizar o método <tt class="docutils literal">update</tt>.</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">notificado</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="mi">500</span> <span class="c"># Retorna a quantidade de itens que foram atualizados</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">1</span>
+</pre></div>
+<p>O <strong>update</strong> realiza um <strong>SQL Update</strong> no banco de dados e retorna a quantidade de linhas que foram atualizados.</p>
+<blockquote>
+Os <tt class="docutils literal">signals</tt> do Django <tt class="docutils literal">pre_save</tt> e <tt class="docutils literal">post_save</tt> não serão chamados,
+pois o método <tt class="docutils literal">save</tt> não é utilizado nesse caso.</blockquote>
+</div>
+<div class="section" id="deletar-dados">
+<h2>Deletar dados</h2>
+<p>O mesmo comportamento existe quando estamos removendo alguns dados.
+Se fosse preciso apagar todos os dados, seria comum se alguém escrevesse assim:</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cadastros</span> <span class="o">=</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">cadastro</span> <span class="ow">in</span> <span class="n">cadastros</span><span class="p">:</span>
+    <span class="n">cadastro</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">501</span> <span class="c"># 1 consulta para retornar os cadastros e 1 para cada item no loop</span>
+</pre></div>
+<p>Porém, pode-se fazer dessa maneira:</p>
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;</span> <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">queries</span><span class="p">)</span>
+<span class="mi">1</span>
+</pre></div>
+<p>QuerySet possui um método chamado <strong>delete</strong> que apaga todos os dados retornados.</p>
+<div class="highlight"><pre><span class="c"># Apagar somente inativos</span>
+<span class="o">&gt;&gt;</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">inativo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+<span class="c"># Apagar somente ativos</span>
+<span class="o">&gt;&gt;</span> <span class="n">Cadastro</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ativo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</pre></div>
+<p>Deve-se lembrar, que assim como o <strong>update</strong> e o <strong>bulk_create</strong> os signals do Django não serão chamados, no caso do <strong>delete</strong> os signals são <tt class="docutils literal">pre_delete</tt> e <tt class="docutils literal">pos_delete</tt>.</p>
+<p>Espero que tenha ajudado, até a próxima!</p>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="/tag/python.html">python</a>
+      <a href="/tag/django.html">django</a>
+    </p>
+  </div>
+</article>
+
+    <footer>
+<p>
+  &copy; Lucas Magnum  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Como otimizar suas consultas no Django - De N a 1 em 20 minutos",
+  "headline": "Como otimizar suas consultas no Django - De N a 1 em 20 minutos",
+  "datePublished": "2015-05-10 13:55:00-03:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "Lucas Magnum",
+    "url": "/author/lucas-magnum.html"
+  },
+  "image": "http://lucasmagnum.github.io/theme/img/avatar.jpg",
+  "url": "/django-introducao-queries.html",
+  "description": "Essa semana fiz uma palestra em um BEV no Luizalabs. Resolvi falar sobre Django, pois é um framework que utilizamos na empresa para diversos projetos. O objetivo é ensinar algumas técnicas simples e que auxiliam a diminuir o número de consultas que realizamos no banco de dados.de Os slides ..."
+}
+</script></body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="/theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/pygments.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/font-awesome.min.css">
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lucas Magnum Atom">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+<meta name="author" content="Lucas Magnum" />
+<meta name="description" content="Esse é o quarto post da série sobre Selenium, hoje você irá aprender a fazer algumas coisas mais interessantes! Veja a primeira parte. Veja a segunda parte. Veja a terceira parte. Esse post será o mais longo, então prepare-se! Parte 4 Expected conditions ActionsChains - Operações avançadas EventListener - Ouvindo seu código ..." />
+<meta name="keywords" content="selenium, python, selenium-serie">
+<meta property="og:site_name" content="Lucas Magnum"/>
+<meta property="og:title" content="Selenium - O que você deveria saber - Parte 4"/>
+<meta property="og:description" content="Esse é o quarto post da série sobre Selenium, hoje você irá aprender a fazer algumas coisas mais interessantes! Veja a primeira parte. Veja a segunda parte. Veja a terceira parte. Esse post será o mais longo, então prepare-se! Parte 4 Expected conditions ActionsChains - Operações avançadas EventListener - Ouvindo seu código ..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/selenium-parte-4.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2014-07-28 11:55:00-03:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/lucas-magnum.html">
+<meta property="article:section" content="Python"/>
+<meta property="article:tag" content="selenium"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="selenium-serie"/>
+<meta property="og:image" content="http://lucasmagnum.github.io/theme/img/avatar.jpg">  <title>Lucas Magnum &ndash; Selenium - O que você deveria saber - Parte 4</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="">
+        <img src="http://lucasmagnum.github.io/theme/img/avatar.jpg" alt="Lucas Magnum" title="Lucas Magnum">
+      </a>
+      <h1><a href="">Lucas Magnum</a></h1>
+      <p>Software Developer</p>
+      <nav>
+        <ul class="list">
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/lucasmagnum" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-linkedin" href="https://br.linkedin.com/in/lucasmagnum" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/lmloliveira" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-twitter" href="http://twitter.com/lucasmagn" target="_blank"><i class="fa fa-twitter"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+
+<article>
+  <header>
+    <h1 id="selenium-parte-4">Selenium - O que você deveria saber - Parte 4</h1>
+    <p>Publicado em Seg 28 julho 2014 in <a href="/category/python.html">Python</a></p>
+  </header>
+  <div>
+    <p>Esse é o quarto post da série sobre Selenium, hoje você irá aprender a fazer algumas coisas mais interessantes!</p>
+<blockquote>
+<ul class="simple">
+<li>Veja a <a class="reference external" href="http://pythonclub.com.br/selenium-parte-1.html">primeira parte</a>.</li>
+<li>Veja a <a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html">segunda parte</a>.</li>
+<li>Veja a <a class="reference external" href="http://pythonclub.com.br/selenium-parte-3.html">terceira parte</a>.</li>
+</ul>
+</blockquote>
+<p>Esse post será o mais longo, então prepare-se!</p>
+<div class="section" id="parte-4">
+<h2>Parte 4</h2>
+<blockquote>
+<ul class="simple">
+<li><a class="reference internal" href="#expected-conditions">Expected conditions</a></li>
+<li><a class="reference internal" href="#actionschains-operacoes-avancadas">ActionsChains - Operações avançadas</a></li>
+<li><a class="reference internal" href="#eventlistener-ouvindo-seu-codigo">EventListener - Ouvindo seu código</a></li>
+</ul>
+</blockquote>
+<div class="section" id="expected-conditions">
+<h3>Expected conditions</h3>
+<p>Em alguns casos você precisa esperar para manipular o elemento até que uma condição se satisfaça, para isso o Selenium possui um conjunto de <strong>funções</strong> para facilitar na maioria das situações.</p>
+<p>Essas condições são chamadas <tt class="docutils literal">expected conditions</tt>, abaixo a lista das principais condições:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal">title_is</tt></dt>
+<dd>Checa se o título (title) da página corresponde ao informado (comparação exata).
+Retorna True ou False.</dd>
+<dt><tt class="docutils literal">title_contains</tt></dt>
+<dd>Checa se o título contém a string informada (case-sensitive).
+Retorna True ou False.</dd>
+<dt><tt class="docutils literal">presence_of_element_located</tt></dt>
+<dd>Checa se o elemento está presente no DOM (ele não precisa estar visível).
+Retorna o elemento se ele estiver presente ou False.</dd>
+<dt><tt class="docutils literal">visibility_of_element_located</tt></dt>
+<dd>Checa se o elemento está presente no DOM e visível (ele precisa ter width e height maior que 0).
+Retorna o elemento se ele estiver visível ou False.</dd>
+<dt><tt class="docutils literal">text_to_be_present_in_element</tt></dt>
+<dd>Checa se o texto está presente no elemento.
+Retorna True ou False.</dd>
+<dt><tt class="docutils literal">text_to_be_present_in_element_value</tt></dt>
+<dd>Checa se o texto está presente no atributo &quot;value&quot; do elemento.
+Retorna True ou False.</dd>
+<dt><tt class="docutils literal">element_to_be_clickable</tt></dt>
+<dd>Checa se o elemento está visível e disponível para ser clicado.
+Retorna o elemento ou False.</dd>
+<dt><tt class="docutils literal">alert_is_present</tt></dt>
+<dd>Checa se existe algum alerta na página.
+Retorna o alerta ou False.</dd>
+</dl>
+<p><em>Todas as funções estão no arquivo: selenium/webdriver/support/expected_conditions.py</em></p>
+<p>Você pode utilizar essas funções em conjunto com o que foi aprendido na <a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html#e-se-eu-quiser-esperar">Parte 2</a></p>
+<p>Exemplos de uso:</p>
+<div class="highlight"><pre><span class="c"># Importar classe para inicializar o browser</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="c"># Importar a classe WebDriverWait</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
+<span class="c"># Importar a classe que contém as funções e aplicar um alias</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support</span> <span class="kn">import</span> <span class="n">expected_conditions</span> <span class="k">as</span> <span class="n">EC</span>
+<span class="c"># Importar classe para ajudar a localizar os elementos</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+
+<span class="n">firefox</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+<span class="c"># Instanciar a classe que irá esperar até 5 segundos</span>
+<span class="n">wait</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span><span class="n">firefox</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c"># Aguardar até que a página tenha o título &quot;PythonClub&quot;</span>
+<span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">title_is</span><span class="p">(</span><span class="s">&quot;PythonClub&quot;</span><span class="p">))</span>
+
+<span class="c"># Aguardar página contenha o título &quot;PythonClub&quot;</span>
+<span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">title_contains</span><span class="p">(</span><span class="s">&quot;PythonClub&quot;</span><span class="p">))</span>
+
+<span class="c"># Aguardar até que o elemento &quot;id_elemento&quot; esteja presente no DOM</span>
+<span class="n">elemento</span> <span class="o">=</span> <span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39;id_elemento&#39;</span><span class="p">)))</span>
+
+<span class="c"># Aguardar até que o elemento &quot;id_elemento&quot; esteja visível</span>
+<span class="n">elemento</span> <span class="o">=</span> <span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">visibility_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39;id_elemento&#39;</span><span class="p">))))</span>
+
+<span class="c"># Aguardar até que o elemento &quot;id_elemento&quot; contenha o texto &quot;Python&quot;</span>
+<span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">text_to_be_present_in_element</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39;id_elemento&#39;</span><span class="p">),</span> <span class="s">&#39;Python&#39;</span><span class="p">))</span>
+
+<span class="c"># Aguardar até que o elemento &quot;id_elemento&quot; contenha o valor &quot;Python&quot;</span>
+<span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">text_to_be_present_in_element_value</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39;id_elemento&#39;</span><span class="p">),</span> <span class="s">&#39;Python&#39;</span><span class="p">)))</span>
+
+<span class="c"># Aguardar até que o elemento &quot;id_elemento&quot; possa ser clicado</span>
+<span class="n">elemento</span> <span class="o">=</span> <span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">element_to_be_clickable</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39;id_elemento&#39;</span><span class="p">)))</span>
+
+<span class="c"># Aguardar até que um alerta esteja presente na página</span>
+<span class="n">wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">alert_is_present</span><span class="p">)</span>
+</pre></div>
+<p>Após os 5 segundos, se a condição retornar <tt class="docutils literal">False</tt> será gerado uma exception <tt class="docutils literal">TimeoutException</tt>.</p>
+<p>Use a abuse das <tt class="docutils literal">conditions</tt>!</p>
+</div>
+<div class="section" id="actionschains-operacoes-avancadas">
+<h3>ActionsChains - Operações avançadas</h3>
+<dl class="docutils">
+<dt><tt class="docutils literal">click_and_hold(on_element=None)</tt></dt>
+<dd>Clica no elemento e mantém o botão esquerdo do mouse pressionado. Se o parâmetro <tt class="docutils literal">on_element</tt> não for informado, será realizado na posição atual do mouse.</dd>
+<dt><tt class="docutils literal">release(on_element=None)</tt></dt>
+<dd>Despressiona o botão do mouse. Se o parâmetro <tt class="docutils literal">on_element</tt> for informado, será realizado no elemento.</dd>
+<dt><tt class="docutils literal">context_click(on_element=None)</tt></dt>
+<dd>Clica no elemento com o botão direito do mouse. Se o parâmetro <tt class="docutils literal">on_element</tt> não for informado, será realizado na posição atual do mouse.</dd>
+<dt><tt class="docutils literal">double_click(on_element=None)</tt></dt>
+<dd>Realiza o clique duplo. Se o parâmetro <tt class="docutils literal">on_element</tt> não for informado, será realizado na posição atual do mouse.</dd>
+<dt><tt class="docutils literal">key_down(value, element=None)</tt></dt>
+<dd>Simula uma tecla sendo pressionada e mantida assim. (Deve ser utilizada somente com as teclas de modificação <strong>Control</strong>, <strong>Alt</strong> e <strong>Shift</strong>). Se o parâmetro <tt class="docutils literal">element</tt> não for informado, será realizado no elemento atual.</dd>
+<dt><tt class="docutils literal">key_up(value, element=None)</tt></dt>
+<dd>Simula uma tecla sendo despressionada. (Deve ser utilizada somente com as teclas de modificação <strong>Control</strong>, <strong>Alt</strong> e <strong>Shift</strong>). Se o parâmetro <tt class="docutils literal">element</tt> não for informado, será realizado no elemento atual.</dd>
+</dl>
+<p>As ações são armazenadas na ordem em que foram invocadas e para que sejam realizadas é preciso chamar o metódo <tt class="docutils literal">perform</tt> da instância.</p>
+<p>Exemplos de uso:</p>
+<div class="highlight"><pre><span class="c"># Importar classe para inicializar o browser</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="c"># Importar a classe ActionChains responsável pelas manipulações</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.action_chains</span> <span class="kn">import</span> <span class="n">ActionChains</span>
+<span class="c"># Importar a classe Keys que podem ser utilizadas no key_up e key_down</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+
+<span class="n">firefox</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="n">ActionChains</span><span class="p">(</span><span class="n">firefox</span><span class="p">)</span>
+
+
+<span class="c"># Clicar e manter na posição atual do mouse</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">click_and_hold</span><span class="p">()</span>
+<span class="c"># Voltar o mouse para o estado inicial</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+<span class="c"># Disparar metódo para que as ações sejam executadas</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+
+
+<span class="n">botao</span> <span class="o">=</span> <span class="n">firefox</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">&quot;#botaoqualquer&quot;</span><span class="p">)</span>
+<span class="c"># Clicar e manter em um botão</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">click_and_hold</span><span class="p">(</span><span class="n">on_element</span><span class="o">=</span><span class="n">botao</span><span class="p">)</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+
+
+<span class="c"># Clicar com o botão direito na posição atual do mouse</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">context_click</span><span class="p">()</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+
+<span class="c"># Clique duplo</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">double_click</span><span class="p">(</span><span class="n">on_element</span><span class="o">=</span><span class="n">botao</span><span class="p">)</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+
+<span class="c"># Exemplo com key_down e key_up. Simular um CTRL + C</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">key_down</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">CONTROL</span><span class="p">)</span> <span class="c"># Pressionar o CTRL</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">)</span> <span class="c"># Pressionar o C</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">key_up</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">CONTROL</span><span class="p">)</span> <span class="c"># Liberar o CTRL</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+</pre></div>
+<p>Tem algumas outras ações bem interessantes, vale dar uma olhada no arquivo.</p>
+<p><em>Você pode visualizar as outras funções em: selenium/webdriver/common/action_chains.py</em></p>
+</div>
+<div class="section" id="eventlistener-ouvindo-seu-codigo">
+<h3>EventListener - Ouvindo seu código</h3>
+<div class="section" id="introducao">
+<h4>Introdução</h4>
+<p>O Selenium provê uma forma bem simples para que possa monitorar tudo que está sendo feito pelo navegador.
+Para cada ação pode ser disparado um evento e esse evento pode ser &quot;ouvido&quot; por seu <tt class="docutils literal">EventListener</tt>.</p>
+<p>É necessário que a instância do navegador seja passada para uma <tt class="docutils literal">classe</tt> que irá disparar todos os eventos e então construir seu <tt class="docutils literal">EventListener</tt> para ouvi-lá.</p>
+</div>
+<div class="section" id="listener">
+<h4>Listener</h4>
+<p>A classe <tt class="docutils literal">AbstractEventListener</tt> foi construída para ser herdada e alterada.
+Cada metódo da classe será executado quando determinado evento for disparado.</p>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">AbstractEventListener</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+  <span class="c"># Será invocado antes de uma url ser acessada pelo metódo &quot;get&quot; do webdriver</span>
+  <span class="k">def</span> <span class="nf">before_navigate_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>  <span class="k">pass</span>
+
+  <span class="c"># Será invocado após uma url ser acessada pelo metódo &quot;get&quot; do webdriver</span>
+  <span class="k">def</span> <span class="nf">after_navigate_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>   <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que o metódo &quot;back&quot; do webdriver seja executado</span>
+  <span class="k">def</span> <span class="nf">before_navigate_back</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span> <span class="k">pass</span>
+
+  <span class="c"># Será invocado depois que o metódo &quot;back&quot; do webdriver seja executado</span>
+  <span class="k">def</span> <span class="nf">after_navigate_back</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>  <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que o metódo &quot;forward&quot; do webdriver seja executado</span>
+  <span class="k">def</span> <span class="nf">before_navigate_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>  <span class="k">pass</span>
+
+  <span class="c"># Será invocado depois que o metódo &quot;forward&quot; do webdriver seja executado</span>
+  <span class="k">def</span> <span class="nf">after_navigate_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>   <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que o metódo &quot;find(s)_element(s)_by_*&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">before_find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>   <span class="k">pass</span>
+
+  <span class="c"># Será invocado após que o metódo &quot;find(s)_element(s)_by_*&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">after_find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>    <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que o metódo &quot;click&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">before_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>    <span class="k">pass</span>
+
+  <span class="c"># Será invocado após que o metódo &quot;click&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">after_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span> <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que o metódo &quot;clear&quot; ou &quot;send_keys&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">before_change_value_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>  <span class="k">pass</span>
+
+  <span class="c"># Será invocado após que o metódo &quot;clear&quot; ou &quot;send_keys&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">after_change_value_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>   <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que o metódo &quot;execute_script&quot; ou &quot;execute_async_script&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">before_execute_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>    <span class="k">pass</span>
+
+  <span class="c"># Será invocado após que o metódo &quot;execute_script&quot; ou &quot;execute_async_script&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">after_execute_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span> <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que uma página seja fechada com o metódo &quot;close&quot;</span>
+  <span class="k">def</span> <span class="nf">before_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span> <span class="k">pass</span>
+
+  <span class="c"># Será invocado após que uma página seja fechada com o metódo &quot;close&quot;</span>
+  <span class="k">def</span> <span class="nf">after_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>  <span class="k">pass</span>
+
+  <span class="c"># Será invocado antes que o metódo &quot;quit&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">before_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>  <span class="k">pass</span>
+
+  <span class="c"># Será invocado depois que o metódo &quot;quit&quot; seja executado</span>
+  <span class="k">def</span> <span class="nf">after_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>   <span class="k">pass</span>
+
+  <span class="c"># Será executado sempre que houver uma exeception</span>
+  <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>  <span class="k">pass</span>
+</pre></div>
+<p><em>Arquivo: selenium/webdriver/support/abstract_event_listener.py</em></p>
+</div>
+<div class="section" id="dispatch">
+<h4>Dispatch</h4>
+<p>A classe <tt class="docutils literal">EventFiringWebDriver</tt> é responsável por disparar os eventos do navegador.
+Para que ela funcione é necessário passar uma instância do navegador e um <tt class="docutils literal">EventListener</tt>.</p>
+<p><em>Arquivo: selenium/webdriver/support/event_firing_webdriver.py</em></p>
+</div>
+<div class="section" id="seu-proprio-listener">
+<h4>Seu próprio Listener</h4>
+<p>Vamos criar um <tt class="docutils literal">EventListener</tt> simples para utilizarmos no nosso exemplo.</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">selenium.webdriver.support.events</span> <span class="kn">import</span> <span class="n">AbstractEventListener</span>
+
+<span class="k">class</span> <span class="nc">MyListener</span><span class="p">(</span><span class="n">AbstractEventListener</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">before_navigate_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Antes de abrir a url </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">url</span>
+
+    <span class="k">def</span> <span class="nf">after_navigate_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Depois de abrir a url </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">url</span>
+
+    <span class="k">def</span> <span class="nf">before_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Antes de clicar no elemento&quot;</span>
+
+    <span class="k">def</span> <span class="nf">after_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Depois de clicar no elemento&quot;</span>
+
+    <span class="k">def</span> <span class="nf">before_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Antes de fechar a pagina&quot;</span>
+
+    <span class="k">def</span> <span class="nf">after_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Depois de fechar a pagina&quot;</span>
+
+    <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exeception</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Ocorreu um erro&quot;</span>
+</pre></div>
+<p>Para criar um <tt class="docutils literal">EventListener</tt> é preciso criar uma classe que herde da <tt class="docutils literal">AbstractEventListener</tt> e
+implementar os metódos que serão invocados a cada evento ou criar uma classe com os mesmos metódos.</p>
+<p>Salve o código em um arquivo chamado &quot;mylistener.py&quot; para testes.</p>
+</div>
+<div class="section" id="juntando-tudo">
+<h4>Juntando tudo</h4>
+<p>Para que tudo funcione corretamente, você precisa primeiro importar as bibliotecas necessárias.</p>
+<div class="highlight"><pre><span class="c"># para instanciar o navegador</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="c"># EventFiringWebdriver para disparar os eventos</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.events</span> <span class="kn">import</span> <span class="n">EventFiringWebDriver</span>
+
+<span class="c"># Importe o seu Listener</span>
+<span class="kn">from</span> <span class="nn">mylistener</span> <span class="kn">import</span> <span class="n">MyListener</span>
+</pre></div>
+<p>Depois criar as instâncias:</p>
+<div class="highlight"><pre><span class="n">firefox</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">MyListener</span><span class="p">()</span>
+
+<span class="c"># Firefox com os eventos sendo disparados</span>
+<span class="n">ef_firefox</span> <span class="o">=</span> <span class="n">EventFiringWebDriver</span><span class="p">(</span><span class="n">firefox</span><span class="p">,</span> <span class="n">listener</span><span class="p">)</span>
+</pre></div>
+<p>Agora é só executar algumas ações e você verá as informações sendo &quot;printadas&quot; na tela.</p>
+<div class="highlight"><pre><span class="c"># abrir página da python club</span>
+<span class="n">ef_firefox</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://pythonclub.com.br/&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Propositalmente irá gerar uma exception pois a classe não existe.</span>
+<span class="sd">        O evento &quot;on_exception&quot; deve ser chamado</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">ef_firefox</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">&#39;post-tile&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="c"># localizamos o primeiro post</span>
+<span class="n">post</span> <span class="o">=</span> <span class="n">ef_firefox</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">&#39;post-title&#39;</span><span class="p">)</span>
+
+<span class="c"># clicar no elemento</span>
+<span class="n">post</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+<span class="c"># fechar a página</span>
+<span class="n">ef_firefox</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+<p>Resultado:</p>
+<div class="highlight"><pre>&gt;&gt; python mylistener.py
+
+Antes de abrir a url http://pythonclub.com.br/
+Depois de abrir a url http://pythonclub.com.br/
+Ocorreu um erro
+Antes de clicar no elemento
+Depois de clicar no elemento
+Antes de fechar a pagina
+Depois de fechar a pagina
+</pre></div>
+<p>Código completo: <a class="reference external" href="https://github.com/LucasMagnum/selenium-serie/blob/master/mylistener.py">mylistener.py</a>.</p>
+<p>Agora você pode explorar o <tt class="docutils literal">AbstractEventListener</tt> e o <tt class="docutils literal">EventFiringWebdriver</tt> e construir seu próprio <tt class="docutils literal">EventListener</tt> de acordo com suas necessidades.</p>
+</div>
+</div>
+<div class="section" id="the-end">
+<h3>The End</h3>
+<p>Acredito que esse seja o último post sobre Selenium, espero que tenham gostado!</p>
+</div>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="/tag/selenium.html">selenium</a>
+      <a href="/tag/python.html">python</a>
+      <a href="/tag/selenium-serie.html">selenium-serie</a>
+    </p>
+  </div>
+</article>
+
+    <footer>
+<p>
+  &copy; Lucas Magnum  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Selenium - O que você deveria saber - Parte 4",
+  "headline": "Selenium - O que você deveria saber - Parte 4",
+  "datePublished": "2014-07-28 11:55:00-03:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "Lucas Magnum",
+    "url": "/author/lucas-magnum.html"
+  },
+  "image": "http://lucasmagnum.github.io/theme/img/avatar.jpg",
+  "url": "/selenium-parte-4.html",
+  "description": "Esse é o quarto post da série sobre Selenium, hoje você irá aprender a fazer algumas coisas mais interessantes! Veja a primeira parte. Veja a segunda parte. Veja a terceira parte. Esse post será o mais longo, então prepare-se! Parte 4 Expected conditions ActionsChains - Operações avançadas EventListener - Ouvindo seu código ..."
+}
+</script></body>
+</html>

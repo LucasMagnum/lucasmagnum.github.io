@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="/theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/pygments.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/font-awesome.min.css">
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lucas Magnum Atom">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+<meta name="author" content="Lucas Magnum" />
+<meta name="description" content="Em março de 2012 foi lançada a versão 1.4 e por aqui que nossa jornada começa, o objetivo não é entrar em detalhes em todas as features que foram implementadas e sim um overview sobre as que considero mais importantes para nosso dia a dia. Versão 1.4 (Há ..." />
+<meta name="keywords" content="python, django">
+<meta property="og:site_name" content="Lucas Magnum"/>
+<meta property="og:title" content="Django - 3 anos em 10 minutos"/>
+<meta property="og:description" content="Em março de 2012 foi lançada a versão 1.4 e por aqui que nossa jornada começa, o objetivo não é entrar em detalhes em todas as features que foram implementadas e sim um overview sobre as que considero mais importantes para nosso dia a dia. Versão 1.4 (Há ..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/django-overview-10-minutos.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2015-04-06 11:55:00-03:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/lucas-magnum.html">
+<meta property="article:section" content="Python"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="django"/>
+<meta property="og:image" content="http://lucasmagnum.github.io/theme/img/avatar.jpg">  <title>Lucas Magnum &ndash; Django - 3 anos em 10 minutos</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="">
+        <img src="http://lucasmagnum.github.io/theme/img/avatar.jpg" alt="Lucas Magnum" title="Lucas Magnum">
+      </a>
+      <h1><a href="">Lucas Magnum</a></h1>
+      <p>Software Developer</p>
+      <nav>
+        <ul class="list">
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/lucasmagnum" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-linkedin" href="https://br.linkedin.com/in/lucasmagnum" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/lmloliveira" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-twitter" href="http://twitter.com/lucasmagn" target="_blank"><i class="fa fa-twitter"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+
+<article>
+  <header>
+    <h1 id="django-overview-10-minutos">Django - 3 anos em 10 minutos</h1>
+    <p>Publicado em Seg 06 abril 2015 in <a href="/category/python.html">Python</a></p>
+  </header>
+  <div>
+    <p>Em março de 2012 foi lançada a versão 1.4 e por aqui que nossa jornada começa, o objetivo não é entrar em detalhes em todas as features que foram implementadas e sim um <cite>overview</cite> sobre as que considero mais importantes para nosso dia a dia.</p>
+<div class="section" id="versao-1-4-ha-3-anos">
+<h2>Versão <a class="reference external" href="https://docs.djangoproject.com/en/1.4/releases/1.4/">1.4</a> (Há 3 anos)</h2>
+<p>Lançada em Março de 2012, suporta Python 2.5 &gt;= 2.7.</p>
+<p>Foi a primeira versão LTS (long-term support), ou seja, ela recebeu correções e atualizações de segurança por pelo menos 3 anos após à data de lançamento.</p>
+<p>É a primeira versão a permitir o uso de <a class="reference external" href="https://docs.djangoproject.com/en/1.4/ref/django-admin/#django-admin-startproject">custom project template</a> e tornar o arquivo <cite>manage.py</cite> <em>o</em> que conhecemos hoje.</p>
+<p>Foi a primeira versão a suportar o <a class="reference external" href="https://docs.djangoproject.com/en/1.4/topics/testing/#django.test.LiveServerTestCase">testes</a> feitos com frameworks que utilizam o browser como o <a class="reference external" href="http://pythonclub.com.br/selenium-parte-1.html">Selenium</a>.</p>
+<p>Algumas outras coisas legais foram:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="https://docs.djangoproject.com/en/1.4/ref/models/querysets/#django.db.models.query.QuerySet.bulk_create">bulk_create</a> para criar vários objetos de uma só vez.</li>
+<li><a class="reference external" href="https://docs.djangoproject.com/en/1.4/ref/models/querysets/#django.db.models.query.QuerySet.prefetch_related">prefetch_related</a> para realizar <cite>joins</cite> em tabelas que possuem relações <cite>many-to-many</cite>.</li>
+<li><a class="reference external" href="https://docs.djangoproject.com/en/1.4/topics/http/urls/#reverse-lazy">reverse_lazy</a> que permite fazer <cite>reverse</cite> antes das configurações de URL serem carregadas.</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="versao-1-5-ha-2-anos">
+<h2>Versão <a class="reference external" href="https://docs.djangoproject.com/en/1.5/releases/1.5/">1.5</a> (Há 2 anos)</h2>
+<p>Lançada em Fevereiro de 2013, suporta Python 2.6.5 &gt;= 2.7 (Python 3 - Experimental).</p>
+<p>A versão 1.5 ficou bem conhecida pela reformulação na aplicação de autenticação, é possível <a class="reference external" href="https://docs.djangoproject.com/en/1.5/topics/auth/customizing/#auth-custom-user">customizar um usuário</a> conforme nossas necessidades.</p>
+<p>É possivel também passar os campos que você <a class="reference external" href="https://docs.djangoproject.com/en/1.5/ref/models/instances/#specifying-which-fields-to-save">gostaria de atualizar</a> quando for salvar um objeto.</p>
+<p>Algumas outras coisas legais foram:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#std:templatetag-verbatim">verbatim</a> template tag para casos onde você deseja ignorar a sintaxe do template.</li>
+<li><a class="reference external" href="https://docs.djangoproject.com/en/1.5/releases/1.5/#new-tutorials">novos tutoriais</a> foram inseridos para ajudar iniciantes e existe também uma seção <cite>Tutoriais Avançados</cite></li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="versao-1-6-ha-1-ano-e-meio">
+<h2>Versão <a class="reference external" href="https://docs.djangoproject.com/en/1.6/releases/1.6/">1.6</a> (Há 1 ano e meio)</h2>
+<p>Lançada em Novembro de 2013, suporta Python 2.6.5 &gt;= 3.3. (Python 3!!!!)</p>
+<p>A versão 1.6 alterou um pouco do <cite>layout</cite> padrão dos projetos que estávamos acostumados, para nossa alegria o <cite>admin.py</cite> é adicionado por padrão na aplicação :)</p>
+<p>Transações possuem <cite>autocommit</cite> habilitado por padrão!</p>
+<p>Os testes são localizados em qualquer arquivo que possua o nome começando com <strong>test_</strong> (Antigamente os testes só eram encontrados nos arquivos models.py e tests.py)</p>
+<p>Algumas outras coisas legais foram:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="https://docs.djangoproject.com/en/1.6/ref/django-admin/#django-admin-check">check</a> comando para validar se suas configurações estão compatíveis com a versão do django.</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="versao-1-7-ha-8-meses">
+<h2>Versão <a class="reference external" href="https://docs.djangoproject.com/en/1.7/releases/1.7/">1.7</a> (Há 8 meses)</h2>
+<p>Lançada em Setembro de 2014, suporta Python 2.7 &gt;= 3.4.</p>
+<p>Um novo conceito de <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/migrations/">migrações</a> foi implementado, até o momento a maioria utilizava o <a class="reference external" href="https://south.readthedocs.org/en/latest/">South</a>, nessa versão tudo é <cite>built-in</cite>.</p>
+<p>Para criar uma aplicação não é necessário mais conter o arquivo <cite>models.py</cite>.</p>
+<p>O <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/applications/">conceito de aplicação</a> foi atualizado e existem vários novas maneiras de se customizar seus dados :)</p>
+<p>O comando <cite>check</cite> foi evoluído e agora realiza uma varredura quase completa no seu código para identificar possíveis problemas.</p>
+</div>
+<div class="section" id="versao-1-8">
+<h2>Versão <a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/1.8/">1.8</a></h2>
+<p>Lançada em Abril de 2015, a versão 1.8 introduz várias features legais!</p>
+<p>É a segunda versão LTS (long-term support), ou seja, vai receber correções e atualizações de segurança por pelo menos 3 anos após à data de lançamento.</p>
+<p>Agora há a possibilidade de utilizar <a class="reference external" href="https://docs.djangoproject.com/en/1.8/topics/templates/">várias linguagens(engines)</a> de templates, ou seja, você pode usar simuntaneamente (não no mesmo arquivo) a <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/templates/language/">Django Template Language</a> ou <a class="reference external" href="http://jinja.pocoo.org/">Jinja2</a>. Há uma API padronizada para quem quiser adicionar suporte para outras linguagens de template no futuro. Há um <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/templates/upgrading/">guia de migração</a> .</p>
+<p>Novos campos foram introduzidos como <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.UUIDField">UUIDField</a> e <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.DurationField">DurationField</a> e  ainda tem mais!</p>
+<p>O <a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/1.8/#model-meta-api">Model._meta API</a> foi totalmente refatorado e padronizado. O <cite>Model._meta</cite> API foi incluida no Django 0.96 e serve para obter informações sobre campos do Model, contudo, essa api era considerada de uso privado, e não tinha qualquer documentação ou comentários. Agora com tudo padronizado, abre uma gama de novas opções para criar apps plugaveis que fazem coisas com Models arbitrarios.</p>
+<p>Algumas outras coisas legais foram:</p>
+<blockquote>
+<ul class="simple">
+<li>O comando de gerenciamento <a class="reference external" href="https://docs.djangoproject.com/en/1.8/howto/legacy-databases/#integrating-django-with-a-legacy-database">inspectdb</a> agora suporta fazer engenharia reversa tambem de Database Views (nas versões anteriores, o inspectdb inspecionava somente tabelas, mas não conseguia &quot;ver&quot; as views).</li>
+<li>Adição/Melhoria de <a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/1.8/#query-expressions-conditional-expressions-and-database-functions">Query Expressions, Conditional Expressions, and Database Functions</a> . Isso adiciona muito mais flexibilidade para fazer pesquisas mais complexas no banco de dados.</li>
+</ul>
+</blockquote>
+<p>Há várias outras ótimas melhorias que omiti, veja o <a class="reference external" href="https://docs.djangoproject.com/en/1.8/releases/">release note</a> completo.</p>
+</div>
+<div class="section" id="o-futuro">
+<h2>O Futuro</h2>
+<div class="section" id="versao-1-9-com-lancamento-previsto-para-outubro-de-2016">
+<h3>Versão 1.9 (Com lançamento previsto para Outubro de 2016)</h3>
+<p>O Django 1.8 mal foi lançado, e já há algumas novidades que talvez venham no Django 1.9.</p>
+<p>Muito provavelmete, o Django 1.9 vai adicionar os tão esperados <a class="reference external" href="https://github.com/django/deps/pull/12">Campos Compostos</a> . Isso vai permitir fazer coisas mais complexas, como ter um campo Dinheiro, que &quot;sabe&quot; como fazer conversões de moeda (ex. Real para Dolar).</p>
+<p>Tambem existe uma expectativa que o tema <a class="reference external" href="https://pypi.python.org/pypi/django-flat-theme">django-flat-admin</a> para o <a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/contrib/admin/">Admin</a> seja integrado no Django 1.9, virando o tema padrão. O <a class="reference external" href="https://pypi.python.org/pypi/django-flat-theme">django-flat-admin</a> somente modifica o CSS, nenhuma tag HTML é alterada em relação ao HTML original do Admin, então ele é relativemente compativel (desde que você não tenha incluido customizações no CSS do Admin). Os core developers do Django estão tratando desse assunto <a class="reference external" href="https://groups.google.com/forum/#!msg/django-developers/HJAikaEBqJ4/pxj1SuwbJm0J">neste tópico</a></p>
+<p>Veja o <a class="reference external" href="https://code.djangoproject.com/wiki/Version1.9Roadmap">Roadmap</a> do que vem por ai no Django 1.9</p>
+</div>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="/tag/python.html">python</a>
+      <a href="/tag/django.html">django</a>
+    </p>
+  </div>
+</article>
+
+    <footer>
+<p>
+  &copy; Lucas Magnum  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Django - 3 anos em 10 minutos",
+  "headline": "Django - 3 anos em 10 minutos",
+  "datePublished": "2015-04-06 11:55:00-03:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "Lucas Magnum",
+    "url": "/author/lucas-magnum.html"
+  },
+  "image": "http://lucasmagnum.github.io/theme/img/avatar.jpg",
+  "url": "/django-overview-10-minutos.html",
+  "description": "Em março de 2012 foi lançada a versão 1.4 e por aqui que nossa jornada começa, o objetivo não é entrar em detalhes em todas as features que foram implementadas e sim um overview sobre as que considero mais importantes para nosso dia a dia. Versão 1.4 (Há ..."
+}
+</script></body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="/theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/pygments.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/css/font-awesome.min.css">
+  <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lucas Magnum Atom">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+<meta name="author" content="Lucas Magnum" />
+<meta name="description" content="Esse é o terceiro post da série sobre Selenium, hoje vamos aprender a executar código javascript e usar diferentes navegadores. Veja a primeira parte. Veja a segunda parte. Parte 3 Executando código javascript Como utilizar diferentes navegadores Executando código javascript Algumas vezes é necessário executar algum código javascript, seja para ..." />
+<meta name="keywords" content="selenium, python, selenium-serie">
+<meta property="og:site_name" content="Lucas Magnum"/>
+<meta property="og:title" content="Selenium - O que você deveria saber - Parte 3"/>
+<meta property="og:description" content="Esse é o terceiro post da série sobre Selenium, hoje vamos aprender a executar código javascript e usar diferentes navegadores. Veja a primeira parte. Veja a segunda parte. Parte 3 Executando código javascript Como utilizar diferentes navegadores Executando código javascript Algumas vezes é necessário executar algum código javascript, seja para ..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/selenium-parte-3.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2014-06-02 10:49:00-03:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/lucas-magnum.html">
+<meta property="article:section" content="Python"/>
+<meta property="article:tag" content="selenium"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="selenium-serie"/>
+<meta property="og:image" content="http://lucasmagnum.github.io/theme/img/avatar.jpg">  <title>Lucas Magnum &ndash; Selenium - O que você deveria saber - Parte 3</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="">
+        <img src="http://lucasmagnum.github.io/theme/img/avatar.jpg" alt="Lucas Magnum" title="Lucas Magnum">
+      </a>
+      <h1><a href="">Lucas Magnum</a></h1>
+      <p>Software Developer</p>
+      <nav>
+        <ul class="list">
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/lucasmagnum" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-linkedin" href="https://br.linkedin.com/in/lucasmagnum" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/lmloliveira" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-twitter" href="http://twitter.com/lucasmagn" target="_blank"><i class="fa fa-twitter"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+
+<article>
+  <header>
+    <h1 id="selenium-parte-3">Selenium - O que você deveria saber - Parte 3</h1>
+    <p>Publicado em Seg 02 junho 2014 in <a href="/category/python.html">Python</a></p>
+  </header>
+  <div>
+    <p>Esse é o terceiro post da série sobre Selenium, hoje vamos aprender a executar código javascript e usar diferentes navegadores.</p>
+<blockquote>
+<ul class="simple">
+<li>Veja a <a class="reference external" href="http://pythonclub.com.br/selenium-parte-1.html">primeira parte</a>.</li>
+<li>Veja a <a class="reference external" href="http://pythonclub.com.br/selenium-parte-2.html">segunda parte</a>.</li>
+</ul>
+</blockquote>
+<div class="section" id="parte-3">
+<h2>Parte 3</h2>
+<blockquote>
+<ul class="simple">
+<li><a class="reference internal" href="#executando-codigo-javascript">Executando código javascript</a></li>
+<li><a class="reference internal" href="#como-utilizar-diferentes-navegadores">Como utilizar diferentes navegadores</a></li>
+</ul>
+</blockquote>
+<div class="section" id="executando-codigo-javascript">
+<h3>Executando código javascript</h3>
+<p>Algumas vezes é necessário executar algum código <tt class="docutils literal">javascript</tt>, seja para adiantar a execução de uma função
+ou até mesmo para manipular um elemento.</p>
+<p>Vamos ao nosso exemplo:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">firefox</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+<span class="n">firefox</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;http://google.com.br/&#39;</span><span class="p">)</span>
+
+<span class="n">firefox</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s">&#39;alert(&quot;código javascript sendo executado&quot;)&#39;</span><span class="p">)</span>
+
+<span class="n">firefox</span><span class="o">.</span><span class="n">execute_async_script</span><span class="p">(</span><span class="s">&#39;alert(&quot;código javascript sendo executado&quot;)&#39;</span><span class="p">)</span>
+</pre></div>
+<p>O Selenium permite que você faça isso através de uma instância do navegador, chamando os metódos <tt class="docutils literal">execute_script</tt> e <tt class="docutils literal">execute_async_script</tt>.</p>
+<p>A diferença entre os dois é que o primeiro (<tt class="docutils literal">execute_script</tt>) irá esperar até ter a resposta do navegador e o outro não.</p>
+<p>Você pode executar qualquer código javascript e isso pode ser muito útil!</p>
+</div>
+<div class="section" id="como-utilizar-diferentes-navegadores">
+<h3>Como utilizar diferentes navegadores</h3>
+<p>Para utilizar navegadores diferentes é bem simples, vamos ver como configurar 2 navegadores diferentes.</p>
+</div>
+</div>
+<div class="section" id="firefox">
+<h2>Firefox</h2>
+<p>O <em>Firefox</em> é o mais simples de ser configurado, você não precisa passar nenhum parâmetro adicional.</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">firefox</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+</pre></div>
+<p>Se a instalação do firefox tiver sido alterada e feito em alguma pasta diferente da padrão, você pode informar o caminho para o executável.</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">firefox</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">(</span><span class="n">firefox_binary</span><span class="o">=</span><span class="s">&#39;/bin/firefox&#39;</span><span class="p">)</span>
+
+<span class="c"># se estiver usando o windows, basta informar o caminho completo</span>
+<span class="n">firefox</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">(</span><span class="n">firefox_binary</span><span class="o">=</span><span class="s">&#39;C:/firefox/firefox.exe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="chrome">
+<h2>Chrome</h2>
+<p>Para utilizar <em>Chrome</em> você precisa ter instalado o chrome no seu computador, você pode fazer isso pelo terminal:</p>
+<div class="highlight"><pre>apt-get install chromium-browser
+</pre></div>
+<p>Após instalar o navegador você precisa realizar o download do <tt class="docutils literal">chromedriver</tt> que é um intermediário entre o Selenium o e Chrome.</p>
+<p>Por default o Selenium procura pelo <tt class="docutils literal">chromedriver</tt> na mesma pasta de onde está sendo executado.</p>
+<p>Faça o download da ultima versão do <a class="reference external" href="http://chromedriver.storage.googleapis.com/index.html">chromedriver</a>, coloque em um local de sua preferência e passe o caminho completo na hora de iniciar o navegador.</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">chrome</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="s">&#39;&lt;caminho para chromedriver&gt;&#39;</span><span class="p">)</span>
+
+<span class="c"># exemplo</span>
+<span class="n">chrome</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="s">&#39;/home/lucasmagnum/downloads/chromedriver&#39;</span><span class="p">)</span>
+</pre></div>
+<p>Você pode visualizar todos os navegadores <a class="reference external" href="http://docs.seleniumhq.org/about/platforms.jsp">suportados</a> pelo Selenium</p>
+<p>Por hoje é só!
+Nos vemos na próxima, espero que tenha aprendido algo hoje :)</p>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="/tag/selenium.html">selenium</a>
+      <a href="/tag/python.html">python</a>
+      <a href="/tag/selenium-serie.html">selenium-serie</a>
+    </p>
+  </div>
+</article>
+
+    <footer>
+<p>
+  &copy; Lucas Magnum  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Selenium - O que você deveria saber - Parte 3",
+  "headline": "Selenium - O que você deveria saber - Parte 3",
+  "datePublished": "2014-06-02 10:49:00-03:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "Lucas Magnum",
+    "url": "/author/lucas-magnum.html"
+  },
+  "image": "http://lucasmagnum.github.io/theme/img/avatar.jpg",
+  "url": "/selenium-parte-3.html",
+  "description": "Esse é o terceiro post da série sobre Selenium, hoje vamos aprender a executar código javascript e usar diferentes navegadores. Veja a primeira parte. Veja a segunda parte. Parte 3 Executando código javascript Como utilizar diferentes navegadores Executando código javascript Algumas vezes é necessário executar algum código javascript, seja para ..."
+}
+</script></body>
+</html>

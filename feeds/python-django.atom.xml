@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Lucas Magnum</title><link href="/" rel="alternate"></link><link href="/feeds/python-django.atom.xml" rel="self"></link><id>/</id><updated>2014-06-06T15:50:00-03:00</updated><entry><title>Usando Redis para cache e sessão do Django</title><link href="/usando-redis-cache-django.html" rel="alternate"></link><updated>2014-06-06T15:50:00-03:00</updated><author><name>Lucas Magnum</name></author><id>tag:,2014-06-06:usando-redis-cache-django.html</id><summary type="html">&lt;p&gt;Nesse post irei explicar como substituir o sistema de cache e sessão do Django para funcionar com o Redis.
+Vou explicar como &lt;a class="reference external" href="#instalacao"&gt;instalar&lt;/a&gt; e alguns &lt;a class="reference external" href="#comandos-basicos"&gt;comandos&lt;/a&gt; do Redis.
+Depois como Django trabalha como o &lt;a class="reference internal" href="#cache"&gt;cache&lt;/a&gt; e &lt;a class="reference external" href="#sessao"&gt;sessão&lt;/a&gt; e logo em seguida vamos aprender a alterar o Django para utilizar o Redis como forma de armazenamento.&lt;/p&gt;
+&lt;div class="section" id="redis"&gt;
+&lt;h2&gt;Redis&lt;/h2&gt;
+&lt;p&gt;Redis é um armazenador de dados no formato &amp;quot;key-value&amp;quot; ou &amp;quot;chave-valor&amp;quot;.
+O acrônimo Redis significa &amp;quot;REmote DIctionary Server&amp;quot;.
+Os dados são armazenados por padrão são em memória, porém você pode configurá-lo para armazenar em disco.&lt;/p&gt;
+&lt;div class="section" id="instalacao"&gt;
+&lt;h3&gt;Instalação&lt;/h3&gt;
+&lt;p&gt;Acesse o &lt;a class="reference external" href="http://redis.io/download"&gt;tutorial oficial&lt;/a&gt; de instalação do Redis, baixe a versão mais nova e siga os passos descritos para finalizar a instalação.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="comandos-basicos"&gt;
+&lt;h3&gt;Comandos básicos&lt;/h3&gt;
+&lt;p&gt;Quando o Redis é instalado, ele cria um atalho para seu cliente chamado &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;redis-cli&lt;/span&gt;&lt;/tt&gt; e com ele podemos executar os comandos abaixo:&lt;/p&gt;
+&lt;p&gt;Primeiro abra o cliente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&amp;gt;&amp;gt; redis-cli
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Com o cliente aberto podemos escolher qual &lt;tt class="docutils literal"&gt;database&lt;/tt&gt; queremos trabalhar, utilizando o comando &lt;tt class="docutils literal"&gt;select&lt;/tt&gt;.
+Basta informar qual o índice da base que queremos utilizar.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;127.0.0.1:6379 &amp;gt; &lt;span class="k"&gt;select&lt;/span&gt; 1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Nesse caso selecionamos a base de índice 1 para realizar as consultas.&lt;/p&gt;
+&lt;p&gt;Se quisermos consultar todas as &lt;tt class="docutils literal"&gt;keys&lt;/tt&gt; que estão armazenadas, basta utilizarmos o comando &lt;tt class="docutils literal"&gt;keys&lt;/tt&gt; com um parâmetro &amp;quot;*&amp;quot;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;127.0.0.1:6379&lt;span class="o"&gt;[&lt;/span&gt;1&lt;span class="o"&gt;]&lt;/span&gt; &amp;gt; keys *
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Se nossas &lt;tt class="docutils literal"&gt;keys&lt;/tt&gt; fossem nomeadas com o prefixo &amp;quot;cache&amp;quot; ou &amp;quot;session&amp;quot;, poderíamos consultá-las assim:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;127.0.0.1:6379&lt;span class="o"&gt;[&lt;/span&gt;1&lt;span class="o"&gt;]&lt;/span&gt; &amp;gt; keys cache:*
+127.0.0.1:6379&lt;span class="o"&gt;[&lt;/span&gt;1&lt;span class="o"&gt;]&lt;/span&gt; &amp;gt; keys session:*
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Existe também a &lt;a class="reference external" href="http://redis.io/commands"&gt;lista completa de comandos&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="django"&gt;
+&lt;h2&gt;Django&lt;/h2&gt;
+&lt;p&gt;Utilizarei nesse exemplo versão &amp;quot;1.6.4&amp;quot; do Django.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pip install &lt;span class="nv"&gt;Django&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;1.6.4
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Para instalar e configurar um ambiente para o Django basta seguir um dos tutoriais abaixo:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/principais-duvidas-de-quem-quer-aprender-django.html"&gt;Regis da Silva - Quem quer aprender Django&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pythonclub.com.br/instalacao-python-django-windows.html"&gt;Thiago Corôa - Instalação Python e Django&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Inicie um novo projeto e faça as configurações abaixo.&lt;/p&gt;
+&lt;div class="section" id="cache"&gt;
+&lt;h3&gt;Cache&lt;/h3&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;O Django vem com um framework de cache que segue a seguinte filosofia:&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;Deve ser o mais rápido possível&lt;/li&gt;
+&lt;li&gt;Deve provê uma interface consistente entre diferentes &lt;tt class="docutils literal"&gt;backends&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Deve ser extensível o suficiente para atender as necessidades do desenvolvedor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;Toda a configuração de cache fica armazenado na variável &lt;tt class="docutils literal"&gt;CACHES&lt;/tt&gt; no nosso &lt;tt class="docutils literal"&gt;settings.py&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Utilizarei a biblioteca &lt;a class="reference external" href="https://github.com/niwibe/django-redis"&gt;django-redis&lt;/a&gt; como nosso &lt;tt class="docutils literal"&gt;backend&lt;/tt&gt; de cache e session.&lt;/p&gt;
+&lt;p&gt;Vamos instalar o &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;django-redis&lt;/span&gt;&lt;/tt&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pip install django-redis
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Agora abra seu arquivo &lt;tt class="docutils literal"&gt;settings.py&lt;/tt&gt; e adicione a variável &lt;tt class="docutils literal"&gt;CACHES&lt;/tt&gt; com os seguintes valores:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;CACHES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;BACKEND&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;LOCATION&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;OPTIONS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="s"&gt;&amp;#39;CLIENT_CLASS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;O que significa esses valores??&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;BACKEND&lt;/strong&gt; : Caminho para a classe que será responsável por realizar adicionar, remover, alterar os dados do cache.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;LOCATION&lt;/strong&gt;: Localização do cache para ser utilizado, no nosso caso é o &lt;tt class="docutils literal"&gt;IP&lt;/tt&gt;:&lt;tt class="docutils literal"&gt;porta&lt;/tt&gt;:&lt;tt class="docutils literal"&gt;Número do banco de dados&lt;/tt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CLIENT_CLASS&lt;/strong&gt;: Própria do &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;django-redis&lt;/span&gt;&lt;/tt&gt;, serve para determinar qual classe será utilizada como cliente.&lt;/p&gt;
+&lt;p&gt;Iremos utilizar as classes padrão do &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;django-redis&lt;/span&gt;&lt;/tt&gt; e sua configuração final ficará assim:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;CACHES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;BACKEND&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;redis_cache.cache.RedisCache&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;LOCATION&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;127.0.0.1:6379:1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;OPTIONS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="s"&gt;&amp;#39;CLIENT_CLASS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;redis_cache.client.DefaultClient&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;Links úteis:&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/cache/"&gt;Django cache framework&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/misc/design-philosophies/#cache-design-philosophy"&gt;Django cache framework phisolophy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://niwibe.github.io/django-redis/#_default_client"&gt;Classes client disponíveis para django-redis&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sessoes"&gt;
+&lt;h3&gt;Sessões&lt;/h3&gt;
+&lt;p&gt;Para ativar a funcionalidade de sessão, é preciso editar a variável &lt;tt class="docutils literal"&gt;MIDDLEWARE_CLASSES&lt;/tt&gt; no arquivo &lt;tt class="docutils literal"&gt;settings.py&lt;/tt&gt;.
+Basta adicionar &lt;tt class="docutils literal"&gt;django.contrib.sessions.middleware.SessionMiddleware&lt;/tt&gt; dentro da listagem.&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;settings.py&lt;/cite&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;MIDDLEWARE_CLASSES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+  &lt;span class="c"&gt;# [...] outros middlewares&lt;/span&gt;
+  &lt;span class="s"&gt;&amp;#39;django.contrib.sessions.middleware.SessionMiddleware&amp;#39;&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Por padrão a sessão já vem ativada.&lt;/p&gt;
+&lt;p&gt;Vamos utilizar uma sessão baseada no cache, como já foi instalado o &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;django-redis&lt;/span&gt;&lt;/tt&gt; só é adicionar as seguintes linhas no arquivo &lt;cite&gt;settings.py&lt;/cite&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;SESSION_ENGINE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;django.contrib.sessions.backends.cache&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;SESSION_CACHE_ALIAS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;default&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;SESSION_CACHE_ALIAS&lt;/strong&gt; se refere a chave que configuramos no cache, se configurássemos mais que um cache, poderíamos informar outro valor.&lt;/p&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;Links úteis:&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/http/sessions/"&gt;How to use sessions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="como-testar"&gt;
+&lt;h2&gt;Como testar&lt;/h2&gt;
+&lt;p&gt;Vá até a pasta do nosso projeto e execute o &lt;cite&gt;syncdb&lt;/cite&gt; para sincronizar a base de dados.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;python manage.py syncdb
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Inicie também o servidor de desenvolvimento do Django.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;python manage.py runserver
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Abra seu navegador e entre na página de administração do Django &lt;a class="reference external" href="http://localhost:8000/admin"&gt;localhost:8000/admin&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Faça seu login para que seja gravado um registro de sessão na base.&lt;/p&gt;
+&lt;p&gt;Para visualizar se o registro foi gravado com sucesso, execute os seguintes comandos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&amp;gt;&amp;gt; redis-cli
+
+127.0.0.1:6379&amp;gt; &lt;span class="k"&gt;select&lt;/span&gt; 1
+127.0.0.1:6379&lt;span class="o"&gt;[&lt;/span&gt;1&lt;span class="o"&gt;]&lt;/span&gt;&amp;gt; keys *
+
+1&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;:1:django.contrib.sessions.cachemnpnqzfl03iwugb99q9ls4w0k2r74gs2&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Se tudo ocorreu como planejado, nesse momento temos as sessões e o cache sendo armazenados no Redis.&lt;/p&gt;
+&lt;p&gt;Espero que tenha gostado, até o próximo!&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="python"></category><category term="django"></category><category term="redis"></category></entry></feed>
