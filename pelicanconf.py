@@ -27,6 +27,8 @@ AUTHOR_FEED_RSS = None
 
 LINKS = ()
 
+DISQUS_SITENAME = 'lucasmagnumgithubio'
+
 
 CC_LICENSE = {
     'name': 'Creative Commons Attribution-ShareAlike',
