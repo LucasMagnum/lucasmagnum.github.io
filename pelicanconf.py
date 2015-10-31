@@ -25,6 +25,8 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
+ROBOTS = 'index, follow'
+
 LINKS = ()
 
 DISQUS_SITENAME = 'lucasmagnumgithubio'
@@ -46,5 +48,7 @@ SOCIAL = (
 )
 
 THEME = 'theme'
+
+GOOGLE_ANALYTICS = 'UA-69554514-1'
 
 DEFAULT_PAGINATION = 5
