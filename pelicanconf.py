@@ -12,6 +12,8 @@ SITESUBTITLE = u'Software Developer'
 SITEDESCRIPTION = u'{} - Software Developer'.format(AUTHOR)
 SITELOGO = '{}/theme/img/avatar.jpg'.format(SITEURL)
 
+OG_LOCALE = 'pt_BR'
+
 PATH = 'content'
 
 TIMEZONE = 'America/Sao_Paulo'
