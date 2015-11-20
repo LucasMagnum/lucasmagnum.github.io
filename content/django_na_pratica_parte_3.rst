@@ -1,7 +1,7 @@
 Django na prática - Templates
 #############################################
 
-:date: 2015-11-20 22:00
+:date: 2015-12-15 00:00
 :tags: python, django, django-na-pratica
 :category: Python
 :slug: django-na-pratica-aula-03
@@ -22,11 +22,11 @@ Para a parte 2 `clique aqui <http://pythonclub.com.br/django-na-pratica-aula-01.
 Hello world
 ===========
 
-No post anterior aprendemos a como criar nossa primeira view, ela está retornando
+No post anterior aprendemos a testar nossa view e percebemos que ela está retornando
 um texto puro, o ideal seria servir algum conteúdo HTML.
 
 Dentro do diretório onde se encontra o ``helloworld.py``, vamos criar uma pasta
-chamada ``templates`` e uma arquivo ``index.html`` com o seguinte conteúdo:
+chamada ``templates`` e um arquivo ``index.html`` com o seguinte conteúdo:
 
 .. code-block:: html
 
@@ -51,6 +51,10 @@ Nossa estrutura ficou assim:
     └── tests.py
 
     1 directory, 3 files
+
+
+Precisamos alterar nossa view para retornar nosso arquivo HTML ao invés de um texto puro.
+
 
 
 
